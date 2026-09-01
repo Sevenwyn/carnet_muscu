@@ -1,0 +1,16 @@
+{
+  "name": "Carnet de charges",
+  "short_name": "Carnet",
+  "description": "Suivi des charges et des répétitions, séance par séance.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111820",
+  "theme_color": "#111820",
+  "icons": [
+    { "src": "icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icone-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
