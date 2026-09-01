@@ -18,7 +18,7 @@ n'est dans ces fichiers, tout reste sur ton téléphone.
 ### 1. Créer le dépôt sur github.com
 
 Bouton **+** en haut à droite → **New repository**.
-Nom : `carnet`. Coche **Public**. **N'ajoute ni README ni .gitignore.**
+Nom : `carnet_muscu`. Coche **Public**. **N'ajoute ni README ni .gitignore.**
 → Create repository.
 
 ### 2. Envoyer les fichiers
@@ -26,10 +26,10 @@ Nom : `carnet`. Coche **Public**. **N'ajoute ni README ni .gitignore.**
     git init -b main
     git add .
     git commit -m "Carnet de charges"
-    git remote add origin https://github.com/TON-PSEUDO/carnet.git
+    git remote add origin https://github.com/Sevenwyn/carnet_muscu.git
     git push -u origin main
 
-Remplace `TON-PSEUDO`. Au premier push, une fenêtre demande de se
+Au premier push, une fenêtre demande de se
 connecter à GitHub : choisis **Sign in with your browser**.
 
 ### 3. Activer Pages
@@ -38,7 +38,7 @@ Dans le dépôt : **Settings** → **Pages** (menu de gauche).
 Source : **Deploy from a branch**. Branche : `main`, dossier `/ (root)`.
 → **Save**. Compte deux minutes.
 
-Adresse : `https://TON-PSEUDO.github.io/carnet/`
+Adresse : `https://sevenwyn.github.io/carnet_muscu/`
 
 ### Mettre à jour ensuite
 
@@ -86,7 +86,7 @@ puis **Site configuration → Change site name** pour choisir l'adresse.
 
 ### Ou branché sur GitHub (recommandé si tu as fait l'étape A)
 
-**Add new site → Import an existing project → GitHub**, choisis `carnet`.
+**Add new site → Import an existing project → GitHub**, choisis `carnet_muscu`.
 Publish directory : `.`. Chaque `git push` redéploie tout seul.
 
 ---
