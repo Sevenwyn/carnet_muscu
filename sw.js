@@ -1,5 +1,5 @@
 /* Carnet de charges — cache hors-ligne */
-var CACHE = "carnet-v2";
+var CACHE = "carnet-v3";
 var FICHIERS = ["./", "./index.html", "./manifest.webmanifest",
                 "./icone-192.png", "./icone-512.png"];
 
@@ -16,22 +16,40 @@ self.addEventListener("activate", function(e){
 });
 
 self.addEventListener("fetch", function(e){
-  if (e.request.method !== "GET") return;
+  var req = e.request;
+  if (req.method !== "GET") return;
+
+  /* La page elle-meme : le reseau d'abord, le cache en secours.
+     Sans ca l'app resterait une visite en retard a chaque mise a jour. */
+  if (req.mode === "navigate" || req.destination === "document"){
+    e.respondWith(
+      fetch(req).then(function(res){
+        var copie = res.clone();
+        caches.open(CACHE).then(function(c){ c.put("./index.html", copie); });
+        return res;
+      }).catch(function(){
+        return caches.match("./index.html").then(function(r){
+          return r || caches.match("./");
+        });
+      })
+    );
+    return;
+  }
+
+  /* Le reste (police, icones) : le cache d'abord, c'est stable. */
   e.respondWith(
-    caches.match(e.request).then(function(rep){
+    caches.match(req).then(function(rep){
       if (rep) return rep;
-      return fetch(e.request).then(function(res){
-        var url = e.request.url;
+      return fetch(req).then(function(res){
+        var url = req.url;
         var cachable = res && res.status === 200 &&
           (url.indexOf(self.location.origin) === 0 || url.indexOf("fonts.g") > -1);
         if (cachable){
           var copie = res.clone();
-          caches.open(CACHE).then(function(c){ c.put(e.request, copie); });
+          caches.open(CACHE).then(function(c){ c.put(req, copie); });
         }
         return res;
-      }).catch(function(){
-        return e.request.mode === "navigate" ? caches.match("./index.html") : Response.error();
-      });
+      }).catch(function(){ return Response.error(); });
     })
   );
 });

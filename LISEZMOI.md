@@ -1,37 +1,96 @@
 # Carnet de charges
 
-Application web autonome : aucun serveur, aucun compte, aucune dépendance.
+Application web autonome. Aucun serveur, aucun compte, aucune dépendance à Claude.
 Les données restent dans le navigateur du téléphone.
 
-## Mettre en ligne
+Toutes les commandes ci-dessous se lancent **depuis ce dossier**.
 
-Dépose le contenu de ce dossier (les 5 fichiers, pas le dossier lui-même)
-sur n'importe quel hébergeur de fichiers statiques :
+---
 
-- **Netlify Drop** — https://app.netlify.com/drop — glisse le dossier, tu as
-  une adresse en trente secondes. Crée un compte gratuit pour la conserver.
-- **GitHub Pages** — dépôt public, Settings > Pages, branche `main`, dossier `/`.
-- **Cloudflare Pages**, **Vercel**, ou l'hébergement d'un site perso existant.
+## A. GitHub Pages — c'est ce qui est en place
 
-L'adresse doit être en **https** : le mode hors-ligne et l'installation sur
-l'écran d'accueil n'y fonctionnent pas autrement.
+Adresse : **https://sevenwyn.github.io/carnet_muscu/**
+Dépôt : https://github.com/Sevenwyn/carnet_muscu
+
+### Publier une modification
+
+    git add .
+    git commit -m "mise à jour"
+    git push
+
+Compte une à deux minutes avant que GitHub Pages reconstruise.
+
+### Si tu devais tout refaire
+
+Créer un dépôt **public** sur github.com (bouton **+** → New repository),
+sans README ni .gitignore, puis :
+
+    git init -b main
+    git add .
+    git commit -m "Carnet de charges"
+    git remote add origin https://github.com/Sevenwyn/carnet_muscu.git
+    git push -u origin main
+
+Puis **Settings** → **Pages** → Source **Deploy from a branch**,
+branche `main`, dossier `/ (root)` → **Save**.
+
+---
+
+## B. Firebase Hosting
+
+Le CLI est déjà installé. `firebase.json` est prêt, avec les en-têtes
+qui empêchent le service worker de rester en cache.
+
+1. Créer un projet sur console.firebase.google.com (Analytics facultatif).
+2. Puis :
+
+    firebase login
+    firebase use --add        # choisir le projet, alias : default
+    firebase deploy --only hosting
+
+Mises à jour ensuite : `firebase deploy --only hosting`
+
+---
+
+## C. Netlify
+
+`netlify.toml` est prêt.
+
+- **Glisser-déposer** : https://app.netlify.com/drop, faire glisser ce dossier.
+- **Branché sur GitHub** : Add new site → Import an existing project → GitHub →
+  `carnet_muscu`, publish directory `.`. Chaque `git push` redéploie tout seul.
+
+---
 
 ## Installer sur le téléphone
 
-- **iPhone** : ouvrir l'adresse dans Safari, bouton Partager, « Sur l'écran d'accueil ».
-- **Android** : ouvrir dans Chrome, menu ⋮, « Installer l'application ».
+- **iPhone** : ouvrir l'adresse dans **Safari** (pas Chrome), bouton Partager,
+  « Sur l'écran d'accueil ».
+- **Android** : Chrome, menu ⋮, « Installer l'application ».
 
-Une fois installée, elle s'ouvre en plein écran, sans barre de navigateur,
-et fonctionne sans réseau.
+L'app s'ouvre en plein écran, sans barre de navigateur, et fonctionne sans réseau.
 
-## Transférer les données existantes
+---
 
-Les données d'un site ne suivent pas d'une adresse à l'autre.
-Sur l'ancienne version, ouvrir « Historique et sauvegarde » puis **Copier**.
-Sur la nouvelle, même endroit, **Restaurer**, coller, valider.
+## Transférer les données
 
-## Mettre à jour
+Les données ne suivent pas d'une adresse à l'autre : chaque site a son
+propre stockage.
 
-Remplacer `index.html`, puis incrémenter `CACHE` dans `sw.js`
-(`carnet-v1` devient `carnet-v2`), sans quoi les téléphones garderont
-l'ancienne version en cache.
+1. Ancienne version : **Historique et sauvegarde** → **Copier**.
+2. Nouvelle version : même endroit → **Restaurer** → coller → **Restaurer**.
+
+---
+
+## Mettre à jour l'app
+
+`build_app.py` régénère `index.html`, `manifest.webmanifest` et `sw.js`
+à partir de `carnet.html`. Il ne touche pas à ce fichier-ci.
+
+**À chaque modification de `index.html`, incrémenter la version du cache**
+dans `sw.js`, ligne 2 : `carnet-v3` devient `carnet-v4`.
+
+Depuis la v3, le service worker va **chercher la page sur le réseau en premier**
+et ne retombe sur le cache que hors ligne. Une mise à jour arrive donc dès le
+prochain lancement, sans avoir à recharger deux fois. Les polices et les icônes
+restent servies depuis le cache, elles ne changent jamais.
