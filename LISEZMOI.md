@@ -87,8 +87,9 @@ propre stockage.
 `build_app.py` régénère `index.html`, `manifest.webmanifest` et `sw.js`
 à partir de `carnet.html`. Il ne touche pas à ce fichier-ci.
 
-**À chaque modification de `index.html`, incrémenter la version du cache**
-dans `sw.js`, ligne 2 : `carnet-v3` devient `carnet-v4`.
+La version du cache dans `sw.js` est **calculée automatiquement** à partir du
+contenu de `index.html` (`carnet-c49dfca8` par exemple). Rien à incrémenter
+à la main : toute modification change l'empreinte, donc invalide le cache.
 
 Depuis la v3, le service worker va **chercher la page sur le réseau en premier**
 et ne retombe sur le cache que hors ligne. Une mise à jour arrive donc dès le
