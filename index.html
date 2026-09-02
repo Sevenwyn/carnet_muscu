@@ -66,6 +66,7 @@ body{margin:0; background:var(--steel); color:var(--ink); font-family:var(--body
 .seance select:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
 .compteur{font-family:var(--cond); font-size:18px; font-weight:600; color:var(--mute);
   font-variant-numeric:tabular-nums; white-space:nowrap}
+.repris{margin:9px 0 0; font-size:12.5px; color:var(--green)}
 .points{display:flex; gap:4px; margin-top:9px}
 .pt{flex:1; height:4px; border-radius:2px; background:var(--line); border:none;
   padding:0; cursor:pointer}
@@ -210,6 +211,7 @@ textarea{width:100%; min-height:80px; margin-top:10px; font-family:ui-monospace,
       <div class="compteur" id="compteur"></div>
     </div>
     <div class="points" id="points"></div>
+    <p class="repris" id="repris" hidden></p>
   </div>
   <div class="corps" id="corps"></div>
   <div class="bas">
@@ -405,18 +407,44 @@ function dateFr(iso){
 /* ============ ÉTAT ============ */
 var seance, pos = 0, saisie = {};
 
-function initSeance(k){
-  seance = k; pos = 0;
-  if (!saisie[k]){
-    saisie[k] = {};
-    PROG[k].exos.forEach(function(ex){
-      var p = lire(ex.series), d = derniere(ex.nom), lignes = [];
+function preparer(k){
+  if (!saisie[k]) saisie[k] = {};
+  PROG[k].exos.forEach(function(ex){
+    var p = lire(ex.series);
+    var st = saisie[k][ex.nom];
+    if (!st){
+      var d = derniere(ex.nom), lignes = [];
       for (var i = 0; i < p.n; i++) lignes.push({charge:null, g:null, d:null});
       var ch = d && d.e.lignes[0] && d.e.lignes[0].charge !== null
              ? d.e.lignes[0].charge : chargeDepart(ex.charge);
       saisie[k][ex.nom] = {lignes:lignes, senti:null, charge:ch, cour:0};
-    });
-  }
+      return;
+    }
+    /* le programme a pu changer depuis : on complete sans rien perdre */
+    while (st.lignes.length < p.n) st.lignes.push({charge:null, g:null, d:null});
+    if (st.cour > p.n) st.cour = p.n;
+  });
+}
+function initSeance(k){ seance = k; pos = 0; preparer(k); }
+
+/* ---- seance en cours : survit a une sortie de l'app ---- */
+var CLE_BROUILLON = "muscu.carnet.encours.v1", repris = false;
+function sauverBrouillon(){
+  try {
+    localStorage.setItem(CLE_BROUILLON, JSON.stringify(
+      {ts:Date.now(), seance:seance, pos:pos, saisie:saisie}));
+  } catch(e){}
+}
+function oublierBrouillon(){
+  try { localStorage.removeItem(CLE_BROUILLON); } catch(e){}
+}
+function lireBrouillon(){
+  try {
+    var b = JSON.parse(localStorage.getItem(CLE_BROUILLON));
+    if (!b || !b.saisie || !b.ts) return null;
+    if (Date.now() - b.ts > 12 * 3600 * 1000) return null;  /* trop vieux */
+    return b;
+  } catch(e){ return null; }
 }
 function etat(ex){ return saisie[seance][ex.nom]; }
 
@@ -483,7 +511,7 @@ function entete(){
       o.value = k; o.textContent = "Séance " + k + " · " + PROG[k].court;
       sel.appendChild(o);
     });
-    sel.addEventListener("change", function(){ initSeance(sel.value); dessiner(); });
+    sel.addEventListener("change", function(){ initSeance(sel.value); sauverBrouillon(); dessiner(); });
   }
   sel.value = seance;
   var n = PROG[seance].exos.length;
@@ -506,6 +534,9 @@ function entete(){
 
 function dessiner(){
   entete();
+  var av = document.getElementById("repris");
+  av.hidden = !repris;
+  if (repris){ av.textContent = "Séance en cours restaurée."; repris = false; }
   corps.innerHTML = "";
   var n = PROG[seance].exos.length;
   document.getElementById("prec").disabled = pos === 0;
@@ -548,7 +579,7 @@ function dessiner(){
     st.charge = Math.round(st.charge);
     bc.appendChild(molette({nom:"charge", valeur:st.charge, min:mini, max:200, pas:pas,
       unite:"kg", fin: colo ? 1 : 0, detail: colo ? montage : null,
-      change:function(v){ st.charge = v; }}));
+      change:function(v){ st.charge = v; sauverBrouillon(); }}));
     f.appendChild(bc);
   }
 
@@ -565,7 +596,7 @@ function dessiner(){
     var lg = st.lignes[st.cour];
     if (lg.g === null) lg.g = suggestion(ex, p, st, st.cour, "g");
     bg.appendChild(molette({nom:"répétitions", valeur:lg.g, min:0, max:200, pas:1,
-      unite:null, petit:u, change:function(v){ lg.g = v; }}));
+      unite:null, petit:u, change:function(v){ lg.g = v; sauverBrouillon(); }}));
     f.appendChild(bg);
 
     if (u){
@@ -575,7 +606,7 @@ function dessiner(){
       bd.appendChild(ed);
       if (lg.d === null) lg.d = lg.g;
       bd.appendChild(molette({nom:"répétitions droite", valeur:lg.d, min:0, max:200, pas:1,
-        unite:null, petit:true, change:function(v){ lg.d = v; }}));
+        unite:null, petit:true, change:function(v){ lg.d = v; sauverBrouillon(); }}));
       f.appendChild(bd);
     }
 
@@ -585,6 +616,7 @@ function dessiner(){
     bv.addEventListener("click", function(){
       st.lignes[st.cour].charge = un ? st.charge : null;
       st.cour++;
+      sauverBrouillon();
       dessiner();
       window.scrollTo({top:0, behavior:"smooth"});
     });
@@ -601,7 +633,7 @@ function dessiner(){
       b.type = "button"; b.className = "chip"; b.textContent = o[1];
       b.setAttribute("aria-pressed", st.senti === o[0] ? "true" : "false");
       b.addEventListener("click", function(){
-        st.senti = st.senti === o[0] ? null : o[0]; dessiner();
+        st.senti = st.senti === o[0] ? null : o[0]; sauverBrouillon(); dessiner();
       });
       se.appendChild(b);
     });
@@ -645,7 +677,7 @@ function ligneSerie(ex, p, u, st, i){
   var fin = document.createElement("span");
   fin.className = "coche"; fin.textContent = faite ? "modifier" : "";
   el.appendChild(fin);
-  if (faite) el.addEventListener("click", function(){ st.cour = i; dessiner(); });
+  if (faite) el.addEventListener("click", function(){ st.cour = i; sauverBrouillon(); dessiner(); });
   return el;
 }
 
@@ -712,6 +744,7 @@ function bilan(){
     DB.seances.push({date:iso, seance:seance, exos:out});
     DB.seances.sort(function(a,b){ return a.date < b.date ? -1 : 1; });
     var ok = sauver();
+    if (ok) oublierBrouillon();
     msg.className = "msg" + (ok ? "" : " ko");
     msg.textContent = ok ? "Séance enregistrée : " + k + " exercices, " + dateFr(iso) + "."
                          : "Ce navigateur refuse d'enregistrer. Copie tes données à la main.";
@@ -771,16 +804,32 @@ function reglages(parent){
 
 /* ============ NAVIGATION ============ */
 document.getElementById("prec").addEventListener("click", function(){
-  if (pos > 0){ pos--; dessiner(); window.scrollTo(0,0); }
+  if (pos > 0){ pos--; sauverBrouillon(); dessiner(); window.scrollTo(0,0); }
 });
 document.getElementById("suiv").addEventListener("click", function(){
-  if (pos < PROG[seance].exos.length){ pos++; dessiner(); window.scrollTo(0,0); }
+  if (pos < PROG[seance].exos.length){ pos++; sauverBrouillon(); dessiner(); window.scrollTo(0,0); }
+});
+/* iOS peut suspendre la page sans prevenir : on ecrit avant de partir */
+window.addEventListener("pagehide", sauverBrouillon);
+window.addEventListener("visibilitychange", function(){
+  if (document.visibilityState === "hidden") sauverBrouillon();
 });
 
 /* ============ DÉMARRAGE ============ */
-var j = new Date().getDay(), depart = "A";
-for (var k in PROG) if (PROG[k].jour === j) depart = k;
-initSeance(depart);
+var brouillon = lireBrouillon();
+if (brouillon && PROG[brouillon.seance]){
+  saisie = brouillon.saisie || {};
+  seance = brouillon.seance;
+  preparer(seance);
+  pos = Math.min(brouillon.pos || 0, PROG[seance].exos.length);
+  repris = Object.keys(saisie[seance] || {}).some(function(n){
+    var st = saisie[seance][n]; return st && st.cour > 0;
+  });
+} else {
+  var j = new Date().getDay(), depart = "A";
+  for (var k in PROG) if (PROG[k].jour === j) depart = k;
+  initSeance(depart);
+}
 dessiner();
 
 })();
