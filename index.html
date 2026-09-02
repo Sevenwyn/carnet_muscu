@@ -103,6 +103,16 @@ body{margin:0; background:var(--steel); color:var(--ink); font-family:var(--body
   color:var(--mute); letter-spacing:.03em}
 .molette.gd{grid-template-columns:52px 1fr 52px}
 .molette.gd .val{font-size:32px}
+.fin{display:grid; grid-template-columns:64px 1fr 64px; gap:8px; margin-top:7px;
+  align-items:center}
+.fin button{border:1px solid var(--line); background:var(--paper); color:var(--mute);
+  border-radius:4px; padding:7px 0; font-family:var(--cond); font-size:16px;
+  font-weight:600; cursor:pointer; touch-action:manipulation}
+.fin button:active{background:var(--ink); color:var(--on-ink); border-color:var(--ink)}
+.fin button:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+.fin .detail{text-align:center; font-size:12.5px; color:var(--mute);
+  font-variant-numeric:tabular-nums}
+.fin .detail b{font-family:var(--cond); font-size:15px; color:var(--ink); font-weight:600}
 
 /* ---------- séries ---------- */
 .series{display:flex; flex-direction:column; gap:5px; margin-top:18px}
@@ -269,6 +279,15 @@ function unite(c){
 }
 function pasCharge(c){ return colonne(c) ? KG_PLAQUE : 1; }
 function miniCharge(c){ return colonne(c) ? KG_PLAQUE : 0; }
+/* 2 poids de 1 kg + 2 de 2 kg : tout appoint de 0 a 6 kg est composable */
+var APPOINT_MAX = 6;
+function montage(kg){
+  var pl = Math.floor(kg / KG_PLAQUE), reste = kg - pl * KG_PLAQUE;
+  if (reste > APPOINT_MAX){ pl += 1; reste -= KG_PLAQUE; }
+  var t = "<b>" + pl + "</b> plaque" + (pl > 1 ? "s" : "");
+  if (reste > 0) t += " + <b>" + reste + "</b> kg";
+  return t;
+}
 function consigneKg(c){
   var m = /pl\.\s*(\d+)(?:\s*-\s*(\d+))?/i.exec(c);
   if (m) return m[2] ? (m[1]*KG_PLAQUE) + "–" + (m[2]*KG_PLAQUE) + " kg"
@@ -383,6 +402,7 @@ function etat(ex){ return saisie[seance][ex.nom]; }
 
 /* ============ MOLETTE ============ */
 function molette(opts){
+  var boite = document.createElement("div");
   var wrap = document.createElement("div");
   wrap.className = "molette" + (opts.petit ? " gd" : "");
   var moins = document.createElement("button"); moins.type="button";
@@ -391,15 +411,17 @@ function molette(opts){
   var plus = document.createElement("button"); plus.type="button";
   plus.textContent="+"; plus.setAttribute("aria-label","Augmenter " + opts.nom);
   var v = opts.valeur;
+  var detail = null;
   function peindre(){
     val.innerHTML = "";
     val.appendChild(document.createTextNode(String(v)));
     if (opts.unite){ var s=document.createElement("small"); s.textContent=opts.unite; val.appendChild(s); }
     val.setAttribute("aria-live","polite");
     val.setAttribute("aria-label", opts.nom + " " + v);
+    if (detail) detail.innerHTML = opts.detail(v);
   }
-  function bouge(d){
-    v = Math.max(opts.min, Math.min(opts.max, +(v + d * opts.pas).toFixed(2)));
+  function bouge(d, pas){
+    v = Math.max(opts.min, Math.min(opts.max, +(v + d * (pas || opts.pas)).toFixed(2)));
     peindre(); opts.change(v);
   }
   [[moins,-1],[plus,1]].forEach(function(paire){
@@ -411,9 +433,23 @@ function molette(opts){
     });
     ["pointerup","pointerleave","pointercancel"].forEach(function(ev){ b.addEventListener(ev, stop); });
   });
-  peindre();
   wrap.appendChild(moins); wrap.appendChild(val); wrap.appendChild(plus);
-  return wrap;
+  boite.appendChild(wrap);
+
+  if (opts.fin){
+    var bas = document.createElement("div"); bas.className = "fin";
+    var m1 = document.createElement("button"); m1.type = "button";
+    m1.textContent = "− " + opts.fin; m1.setAttribute("aria-label","Retirer " + opts.fin + " kg");
+    detail = document.createElement("div"); detail.className = "detail";
+    var p1 = document.createElement("button"); p1.type = "button";
+    p1.textContent = "+ " + opts.fin; p1.setAttribute("aria-label","Ajouter " + opts.fin + " kg");
+    m1.addEventListener("click", function(e){ e.preventDefault(); bouge(-1, opts.fin); });
+    p1.addEventListener("click", function(e){ e.preventDefault(); bouge(1, opts.fin); });
+    bas.appendChild(m1); bas.appendChild(detail); bas.appendChild(p1);
+    boite.appendChild(bas);
+  }
+  peindre();
+  return boite;
 }
 
 /* ============ RENDU ============ */
@@ -486,11 +522,13 @@ function dessiner(){
     var ec = document.createElement("div"); ec.className = "etiq";
     ec.innerHTML = "<span>Charge</span>" + (ck ? "<em>consigne " + ck + "</em>" : "");
     bc.appendChild(ec);
-    var mini = miniCharge(ex.charge), pas = pasCharge(ex.charge);
+    var mini = miniCharge(ex.charge), pas = pasCharge(ex.charge),
+        colo = colonne(ex.charge);
     if (st.charge < mini) st.charge = mini;
-    st.charge = Math.round(st.charge / pas) * pas;
+    st.charge = Math.round(st.charge);
     bc.appendChild(molette({nom:"charge", valeur:st.charge, min:mini, max:200, pas:pas,
-      unite:"kg", change:function(v){ st.charge = v; }}));
+      unite:"kg", fin: colo ? 1 : 0, detail: colo ? montage : null,
+      change:function(v){ st.charge = v; }}));
     f.appendChild(bc);
   }
 
