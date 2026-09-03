@@ -14,7 +14,9 @@ Deux pages sont publiées :
 - **Carnet de saisie** — https://sevenwyn.github.io/carnet_muscu/
 - **Programme et guides** — https://sevenwyn.github.io/carnet_muscu/programme.html
 
-Elles se renvoient l'une à l'autre par un lien en haut de page.
+Les deux pages sont **indépendantes** : aucun lien ne les relie.
+Le carnet embarque ses propres guides de mouvement, il se suffit à lui-même
+pendant la séance. Le programme reste consultable à son adresse, à part.
 Dépôt : https://github.com/Sevenwyn/carnet_muscu
 
 `programme.html` est généré par `build_app.py` à partir de

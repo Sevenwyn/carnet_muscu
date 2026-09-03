@@ -66,9 +66,6 @@ body{margin:0; background:var(--steel); color:var(--ink); font-family:var(--body
 .seance select:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
 .compteur{font-family:var(--cond); font-size:18px; font-weight:600; color:var(--mute);
   font-variant-numeric:tabular-nums; white-space:nowrap}
-.liens{margin:0 0 8px; text-align:right; font-size:12.5px}
-.liens a{color:var(--mute); text-decoration:none; border-bottom:1px solid var(--line)}
-.liens a:hover{color:var(--ink)}
 .repris{margin:9px 0 0; font-size:12.5px; color:var(--green)}
 .points{display:flex; gap:4px; margin-top:9px}
 .pt{flex:1; height:4px; border-radius:2px; background:var(--line); border:none;
@@ -241,7 +238,6 @@ textarea{width:100%; min-height:80px; margin-top:10px; font-family:ui-monospace,
 <body>
 <div class="app">
   <div class="haut">
-    <p class="liens"><a href="programme.html">Programme et guides de mouvement &rarr;</a></p>
     <div class="ligne1">
       <div class="seance"><select id="selSeance" aria-label="Séance"></select></div>
       <div class="compteur" id="compteur"></div>
