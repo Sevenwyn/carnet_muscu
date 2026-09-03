@@ -250,12 +250,29 @@ var PROG = {
  ]},
  C:{court:"Jambes", jour:6, exos:[
   {nom:"Fentes bulgares, pied arrière sur le banc", mus:"Quadriceps · fessiers", series:"4 × 8-10", charge:"2 × 10 kg"},
-  {nom:"Leg extension, poste leg developer", mus:"Quadriceps — l'avant de la cuisse", series:"4 × 12-15", charge:"pl. 8-10"},
+  {nom:"Squat gobelet, un haltère contre la poitrine", mus:"Quadriceps · fessiers · gainage", series:"3 × 10-12", charge:"10 kg"},
+  {nom:"Leg extension, poste leg developer", mus:"Quadriceps — l'avant de la cuisse", series:"4 × 12-15", charge:"pl. 3-4"},
   {nom:"Leg curl debout, poulie basse et sangle de cheville", mus:"Ischio-jambiers — l'arrière de la cuisse", series:"4 × 12-15", charge:"pl. 3-5 · par jambe"},
   {nom:"Mollets debout, une jambe à la fois", mus:"Mollets", series:"3 × 15", charge:"2 × 10 kg · par jambe"},
   {nom:"Fente latérale, un haltère contre la poitrine", mus:"Adducteurs — l'intérieur de la cuisse · quadriceps", series:"3 × 10", charge:"10 kg · par côté"},
   {nom:"Crunch à la poulie haute, assis ou à genoux", mus:"Grands droits — la sangle abdominale", series:"3 × 12-15", charge:"pl. 4-6"}
  ]}
+};
+
+/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
+var RENOMMAGES = {
+ "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
+ "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
+ "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
+ "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
+ "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
+ "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
+ "Montées sur le banc, explosives": "Montées sur le banc, explosives",
+ "Leg extension": "Leg extension, poste leg developer",
+ "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
+ "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
+ "Crunch à la poulie haute": "Crunch à la poulie haute, à genoux",
+ "Pull-over poulie haute": "Pull-over poulie haute, bras tendus"
 };
 
 /* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
