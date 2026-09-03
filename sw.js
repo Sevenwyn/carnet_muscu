@@ -1,5 +1,5 @@
 /* Carnet de charges — cache hors-ligne */
-var CACHE = "carnet-e478ddbc";
+var CACHE = "carnet-2e69319b";
 var FICHIERS = ["./", "./index.html", "./programme.html", "./manifest.webmanifest",
                 "./icone-192.png", "./icone-512.png"];
 
