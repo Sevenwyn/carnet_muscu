@@ -9,8 +9,17 @@ Toutes les commandes ci-dessous se lancent **depuis ce dossier**.
 
 ## A. GitHub Pages — c'est ce qui est en place
 
-Adresse : **https://sevenwyn.github.io/carnet_muscu/**
+Deux pages sont publiées :
+
+- **Carnet de saisie** — https://sevenwyn.github.io/carnet_muscu/
+- **Programme et guides** — https://sevenwyn.github.io/carnet_muscu/programme.html
+
+Elles se renvoient l'une à l'autre par un lien en haut de page.
 Dépôt : https://github.com/Sevenwyn/carnet_muscu
+
+`programme.html` est généré par `build_app.py` à partir de
+`programme-artifact.html`, lui-même produit par `build_artifact.py`
+depuis le `programme.html` du dossier parent. Ne l'édite pas à la main.
 
 ### Publier une modification
 

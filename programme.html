@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Suivi des charges et des répétitions, séance par séance.">
+<meta name="theme-color" content="#E7EBEE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111820" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Programme">
+<link rel="apple-touch-icon" href="icone-192.png">
+<link rel="icon" href="icone-192.png">
+<title>Esthétique &amp; Escrime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --steel:#E7EBEE;
+  --paper:#FFFFFF;
+  --ink:#16202B;
+  --mute:#61707E;
+  --line:#CCD5DC;
+  --green:#00784A;
+  --red:#B32A30;
+  --hair:#E4EAEE;
+  --rest:#FAFBFC;
+  --hover:#F4F7F9;
+  --on-ink:#FFFFFF;
+  --hatch-a:#F2F5F7;
+  --hatch-b:#E7ECF0;
+  --wash:rgba(179,42,48,.05);
+  --cond:"Barlow Condensed", "Arial Narrow", sans-serif;
+  --body:"Barlow", -apple-system, system-ui, sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --steel:#121820;
+    --paper:#1A222B;
+    --ink:#E6ECF1;
+    --mute:#93A3B1;
+    --line:#2C3A46;
+    --green:#4FB98A;
+    --red:#E8737A;
+    --hair:#252F39;
+    --rest:#171F27;
+    --hover:#212B35;
+    --on-ink:#121820;
+    --hatch-a:#1D2630;
+    --hatch-b:#222C37;
+    --wash:rgba(232,115,122,.07);
+  }
+}
+:root[data-theme="dark"]{
+  --steel:#121820;
+  --paper:#1A222B;
+  --ink:#E6ECF1;
+  --mute:#93A3B1;
+  --line:#2C3A46;
+  --green:#4FB98A;
+  --red:#E8737A;
+  --hair:#252F39;
+  --rest:#171F27;
+  --hover:#212B35;
+  --on-ink:#121820;
+  --hatch-a:#1D2630;
+  --hatch-b:#222C37;
+  --wash:rgba(232,115,122,.07);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--steel); color:var(--ink);
+  font-family:var(--body); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px; margin:0 auto; padding:28px 18px 80px}
+
+/* ---------- en-tête ---------- */
+.liens{margin:0 0 8px; text-align:right; font-size:12.5px}
+.liens a{color:var(--mute); text-decoration:none; border-bottom:1px solid var(--line)}
+.liens a:hover{color:var(--ink)}
+.title{font-family:var(--cond); font-weight:600; font-size:38px; line-height:1.05; margin:0 0 4px; letter-spacing:.01em}
+.sub{color:var(--mute); font-size:15px; margin:0 0 22px}
+
+/* ---------- bandeau semaine (piste) ---------- */
+.piste{display:grid; grid-template-columns:repeat(7,1fr); background:var(--paper);
+  border:1px solid var(--line); border-radius:3px; overflow:hidden; margin-bottom:26px}
+.day{padding:10px 6px 12px; text-align:center; border-right:1px solid var(--line);
+  background:none; font-family:var(--body); cursor:default; position:relative}
+.day:last-child{border-right:none}
+.day .dn{font-size:12px; color:var(--mute); display:block; margin-bottom:5px}
+.day .dv{font-family:var(--cond); font-size:22px; font-weight:600; line-height:1}
+.day.lift{cursor:pointer}
+.day.lift .dv{color:var(--ink)}
+.day.fence{background:repeating-linear-gradient(135deg,var(--hatch-a),var(--hatch-a) 5px,var(--hatch-b) 5px,var(--hatch-b) 10px)}
+.day.fence .dv{font-size:14px; font-weight:500; color:var(--mute); padding-top:5px}
+.day.rest{background:var(--rest)}
+.day.rest .dv{font-size:14px; font-weight:500; color:var(--mute); padding-top:5px}
+.day.today::after{content:""; position:absolute; left:0; right:0; bottom:0; height:3px; background:var(--ink)}
+.day.lift:hover{background:var(--hover)}
+
+/* ---------- onglets ---------- */
+.tabs{display:flex; gap:6px; margin:0 0 18px; flex-wrap:wrap;
+  position:sticky; top:0; z-index:5; background:var(--steel); padding:10px 0 10px}
+.tab{font-family:var(--cond); font-size:19px; font-weight:600; letter-spacing:.01em;
+  padding:8px 15px; border:1px solid var(--line); background:var(--paper); color:var(--mute);
+  border-radius:3px; cursor:pointer; font-feature-settings:"tnum"}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink); border-color:var(--ink); color:var(--on-ink)}
+.tab:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+
+/* ---------- panneau séance ---------- */
+.panel{background:var(--paper); border:1px solid var(--line); border-radius:3px; padding:20px 18px 8px}
+.panel[hidden]{display:none}
+.ptitle{font-family:var(--cond); font-size:27px; font-weight:600; margin:0 0 2px; line-height:1.1}
+.mute{color:var(--mute); font-size:12px}
+.pmeta{color:var(--mute); font-size:14px; margin:0 0 18px}
+.warm{font-size:14px; color:var(--mute); border-left:2px solid var(--line);
+  padding:2px 0 2px 12px; margin:0 0 20px}
+.fold{font-size:14px; color:var(--mute); border-left:2px solid var(--line);
+  padding:0 0 0 12px; margin:0 0 14px}
+.fold.rouge{border-left-color:var(--red)}
+.fold summary{cursor:pointer; list-style:none; color:var(--ink); font-weight:500;
+  padding:2px 0; display:flex; align-items:baseline; gap:7px}
+.fold summary::-webkit-details-marker{display:none}
+.fold summary::before{content:"+"; font-family:var(--cond); font-size:17px;
+  line-height:1; color:var(--mute); width:9px}
+.fold[open] summary::before{content:"–"}
+.fold summary:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+.fold p{margin:8px 0 12px}
+
+/* ---------- lignes d'exercice ---------- */
+.ex{display:grid; grid-template-columns:1fr auto; gap:6px 18px; align-items:center;
+  padding:13px 0 13px 12px; border-top:1px solid var(--hair); border-left:3px solid transparent}
+.ex:first-of-type{border-top:none}
+.ex.f{border-left-color:var(--red)}
+.ex.e{border-left-color:var(--green)}
+.ex.b{border-left-color:var(--green); background:linear-gradient(to right, var(--wash), transparent 60%)}
+.name{font-size:16px; font-weight:500}
+.name b{font-weight:600}
+.tip{display:block; font-size:13.5px; color:var(--mute); font-weight:400; margin-top:2px}
+details.guide{grid-column:1/-1; margin:6px 0 0; font-size:13.5px; color:var(--mute)}
+details.guide summary{cursor:pointer; list-style:none; color:var(--ink); font-weight:500;
+  padding:4px 0; display:inline-flex; align-items:baseline; gap:6px}
+details.guide summary::-webkit-details-marker{display:none}
+details.guide summary::before{content:"+"; font-family:var(--cond); font-size:16px;
+  line-height:1; color:var(--mute)}
+details.guide[open] summary::before{content:"–"}
+details.guide summary:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+.g-lab{font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--ink);
+  font-weight:600; margin:11px 0 4px}
+.guide ol,.guide ul{margin:0; padding-left:18px}
+.guide li{margin-bottom:5px}
+.guide ul.pieges li::marker{color:var(--red)}
+.guide p{margin:0 0 6px}
+.mus{display:block; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--mute); font-weight:500; margin-top:4px}
+.mus b{color:var(--ink); font-weight:600}
+.stats{display:flex; gap:14px}
+.st{min-width:52px; text-align:right}
+.st .lab{display:block; font-size:10.5px; color:var(--mute); line-height:1.4; letter-spacing:.02em}
+.st .val{font-family:var(--cond); font-size:20px; font-weight:600; line-height:1.05;
+  white-space:nowrap; font-feature-settings:"tnum"}
+.ss{grid-column:1/-1; padding:0 0 0 0; margin:-4px 0 0; font-size:13.5px; color:var(--mute)}
+
+/* ---------- séparateur bloc ---------- */
+.blk{display:flex; align-items:center; gap:10px; margin:18px 0 2px; padding-left:12px}
+.blk span{font-family:var(--cond); font-size:17px; font-weight:600; color:var(--red)}
+.blk i{flex:1; height:1px; background:var(--line)}
+
+/* ---------- légende ---------- */
+.key{display:flex; gap:20px; flex-wrap:wrap; font-size:13.5px; color:var(--mute); margin:14px 0 26px; padding-left:2px}
+.key i{display:inline-block; width:3px; height:13px; vertical-align:-2px; margin-right:7px}
+.k-e i{background:var(--green)} .k-f i{background:var(--red)}
+
+/* ---------- sections basses ---------- */
+h2{font-family:var(--cond); font-size:25px; font-weight:600; margin:34px 0 12px}
+.card{background:var(--paper); border:1px solid var(--line); border-radius:3px; padding:18px; overflow-x:auto}
+table{width:100%; border-collapse:collapse; font-size:15px; font-variant-numeric:tabular-nums}
+th{text-align:left; font-size:12px; color:var(--mute); font-weight:500; padding:0 8px 8px 0; border-bottom:1px solid var(--line)}
+td{padding:8px 8px 8px 0; border-bottom:1px solid var(--hair); vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.n{font-family:var(--cond); font-weight:600; font-size:18px; white-space:nowrap; text-align:right; padding-right:0}
+th.n{text-align:right; padding-right:0}
+ol{margin:0; padding-left:20px} li{margin-bottom:5px}
+p{margin:0 0 12px} p:last-child{margin-bottom:0}
+.note{font-size:14.5px; color:var(--mute)}
+
+@media (max-width:620px){
+  .wrap{padding:20px 14px 60px}
+  .title{font-size:31px}
+  .ex{grid-template-columns:1fr; padding-left:10px}
+  .stats{gap:0; justify-content:space-between; max-width:340px}
+  .st{text-align:left; min-width:0}
+  .st .val{font-size:18px}
+  .day .dn{font-size:11px}
+  .day .dv{font-size:18px}
+  .day.fence .dv{font-size:11px}
+  .day.rest .dv{font-size:11px}
+  .tabs{gap:5px}
+  .tab{font-size:17px; padding:7px 12px; flex:1; text-align:center}
+  h2{font-size:23px; margin-top:28px}
+  .card{padding:15px}
+  table{font-size:14.5px}
+  /* les tableaux de texte se replient en fiches plutot que de se compresser */
+  table.stack, table.stack tbody, table.stack tr, table.stack td{display:block; width:100%}
+  table.stack thead{display:none}
+  table.stack tr{padding:12px 0; border-bottom:1px solid var(--hair)}
+  table.stack tr:last-child{border-bottom:none}
+  table.stack td{border:none; padding:0 0 5px}
+  table.stack td:first-child{font-family:var(--cond); font-size:19px; font-weight:600}
+  table.stack td.n{text-align:left}
+}
+@media print{
+  body{background:#fff}
+  .fold summary::before{content:""}
+  .fold > p{display:block !important}
+  .tabs,.piste{display:none}
+  .panel[hidden]{display:block !important}
+  .panel{page-break-inside:avoid; margin-bottom:16px; border:1px solid #999}
+}
+@media (prefers-reduced-motion:no-preference){
+  .tab{transition:background .15s, color .15s}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="liens"><a href="./">&larr; Carnet de charges</a></p>
+
+  <h1 class="title">Programme musculation</h1>
+  <p class="sub">Esthétique et escrime, à parts égales. Trois séances par semaine. Force USA HG100, banc, 2 haltères de 10 kg.</p>
+
+  <div class="piste" id="piste">
+    <button class="day lift" data-t="A"><span class="dn">Lun</span><span class="dv">A</span></button>
+    <div class="day fence"><span class="dn">Mar</span><span class="dv">Escrime</span></div>
+    <div class="day fence"><span class="dn">Mer</span><span class="dv">Escrime</span></div>
+    <button class="day lift" data-t="B"><span class="dn">Jeu</span><span class="dv">B</span></button>
+    <div class="day fence"><span class="dn">Ven</span><span class="dv">Escrime</span></div>
+    <button class="day lift" data-t="C"><span class="dn">Sam</span><span class="dv">C</span></button>
+    <div class="day rest"><span class="dn">Dim</span><span class="dv">Repos</span></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-t="A" aria-selected="true">A · Pecs</button>
+    <button class="tab" role="tab" data-t="B" aria-selected="false">B · Dos</button>
+    <button class="tab" role="tab" data-t="C" aria-selected="false">C · Jambes</button>
+  </div>
+
+  <!-- ================= SÉANCE A ================= -->
+  <section class="panel" id="p-A" role="tabpanel">
+    <h2 class="ptitle" style="margin-top:0">A — Pecs, épaules, triceps</h2>
+    <p class="pmeta">Lundi · 68 min · la séance plaisir, celle qui lance la semaine</p>
+    <details class="fold"><summary>Échauffement</summary>
+      <p>5 min cardio, 20 rotations d'épaules, 15 pompes légères, 1 série à vide sur le premier exercice. <b>Puis, bras gauche seul, à vide :</b> 2 × 10 élévations latérales très lentes, 4 secondes pour monter, 4 pour descendre, en posant la main droite sur le deltoïde gauche pour sentir s'il se contracte. Tu ne passes à la suite que quand tu le sens durcir sous les doigts. <b>Puis, pour la poitrine :</b> paumes jointes devant le sternum, tu pousses une main contre l'autre de toutes tes forces, 10 fois 5 secondes, en posant les doigts sur ton pectoral entre chaque pour vérifier qu'il durcit. Aucun matériel, et c'est la façon la plus simple d'apprendre à contracter un muscle que tu ne sens pas encore.</p>
+    </details>
+    <details class="fold rouge"><summary>Les deux consignes de la séance</summary>
+      <p><b>Le bras gauche donne le ton.</b> Ton épaule gauche ne s'allume pas encore — pas de douleur, pas d'instabilité, juste une commande qui ne passe pas sur le bras non-dominant. La règle, sur <b>tous</b> les exercices à un bras de cette séance : <b>tu commences toujours par le gauche, tu comptes ses répétitions, et le droit ne fait que ce que le gauche a fait.</b> Même s'il pouvait en faire cinq de plus. C'est la seule façon de refermer l'écart au lieu de le creuser. Charges très légères et mouvement lent tant que tu ne sens pas le muscle travailler : ici on cherche la sensation, pas la performance.</p>
+      <p><b>Pas de pec deck pour l'instant.</b> Il activait le deltoïde et pas le pectoral, malgré tous les réglages. Ce n'est pas une faute de ta part : chez un débutant, l'avant de l'épaule prend souvent le dessus sur un exercice d'isolation, et aucune consigne ne force un muscle à se recruter tant que la connexion n'est pas là. Il est remplacé par un <b>second angle du développé</b> : le mouvement où ton pectoral répond déjà, avec le siège monté pour attaquer le bas de la poitrine. La règle qu'on en tire vaut pour toute la séance : <b>tu construis avec ce que tu sens, tu n'insistes pas sur ce que tu ne sens pas.</b> On réessaiera le pec deck vers la mi-octobre, quand ton pectoral répondra franchement.</p>
+    </details>
+
+    <div class="ex e">
+      <div class="name">Développé pectoraux machine
+        <span class="mus"><b>Pectoraux</b> · triceps · avant d'épaule</span>
+        <span class="tip">Ton meilleur exercice : le seul où tu sens vraiment le pectoral.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 8-12</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-0-1</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">ta plaque</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">90 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Réglage habituel du siège, dos entier plaqué au dossier, pieds bien à plat au sol. Les poignées doivent arriver à hauteur de poitrine.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Sors la poitrine et serre les omoplates en arrière contre le dossier. Elles ne bougent plus de la série.</li>
+          <li>Pousse vers l'avant en 1 seconde, sans à-coup.</li>
+          <li>Arrête-toi juste avant que les coudes soient complètement tendus.</li>
+          <li>Reviens en 2 secondes en freinant, jusqu'à sentir l'étirement sans forcer.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Verrouiller les coudes en haut.</b> La tension quitte le pectoral et passe dans l'articulation. Garde toujours un léger pli.</li>
+          <li><b>Laisser les épaules rouler vers l'avant.</b> C'est l'avant de l'épaule qui prend le travail. Omoplates serrées, poitrine sortie.</li>
+          <li><b>Rebondir en bas.</b> Tu perds la partie la plus efficace du mouvement. Marque l'arrêt.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Écarté poulie basse, un bras, bas vers haut
+        <span class="mus"><b>Pectoraux, faisceau haut</b> · avant d'épaule</span>
+        <span class="tip">Exercice d'apprentissage, pas de construction. Deux séries légères pour chercher la sensation.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-1</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 1-2 · par bras</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Poignée simple sur la poulie basse. Place-toi un pas de côté, poignée dans la main la plus éloignée de la machine.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Coude légèrement fléchi et <b>fixe</b> : il ne bouge plus du tout de la série.</li>
+          <li>Balaye de la hanche jusqu'à hauteur de l'œil opposé, en diagonale.</li>
+          <li>1 seconde de contraction en haut.</li>
+          <li>Reviens en freinant. <b>Gauche d'abord</b>, le droit s'aligne sur son nombre de répétitions.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Plier et déplier le coude.</b> Tu fais alors un curl ou une extension, plus un écarté.</li>
+          <li><b>Ne sentir que l'épaule.</b> Ça arrive, ne t'acharne pas : passe à la suite. Cet exercice n'a aucun enjeu pour l'instant.</li>
+          <li><b>Charger.</b> Plaque 1 suffit. Ici on cherche la sensation, pas la performance.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Développé machine, siège haut
+        <span class="mus"><b>Pectoraux, faisceau bas</b> · triceps</span>
+        <span class="tip">Même machine, siège monté de deux ou trois crans.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 10-12</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-1</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">ta plaque −1</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">75 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Monte le siège par rapport à ton réglage habituel. Les poignées arrivent alors plus bas sur ton torse.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Même installation que le développé classique : dos plaqué, omoplates serrées.</li>
+          <li>Tu pousses vers l'avant <b>et légèrement vers le bas</b>.</li>
+          <li>Une seconde de contraction, retour freiné en 2 secondes.</li>
+          <li>Charge : une plaque de moins que ta série principale.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Sentir l'épaule.</b> C'est que le siège est encore trop bas. Monte-le d'un cran de plus.</li>
+          <li><b>Reprendre le réglage du premier exercice.</b> Tout l'intérêt est dans l'angle différent — si le siège est au même endroit, tu refais le même exercice.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Pompes mains sur le banc
+        <span class="mus"><b>Pectoraux</b> · triceps · gainage</span>
+        <span class="tip">Version facile assumée : tu dois tenir 10 à 15 répétitions.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × max</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">—</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">poids&nbsp;du&nbsp;corps</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Mains sur le banc à largeur d'épaules, pieds au sol, corps en ligne droite de la tête aux talons.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Descends en 2 secondes jusqu'à frôler le banc de la poitrine.</li>
+          <li>Coudes à environ 45° du corps, pas écartés en croix.</li>
+          <li>Pousse pour remonter, sans creuser le bas du dos.</li>
+          <li>Va jusqu'à l'échec technique : tu t'arrêtes quand la forme se dégrade, pas quand ça brûle.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Les hanches qui tombent.</b> Serre les fessiers et le ventre, le corps reste une planche.</li>
+          <li><b>Descendre à moitié.</b> Poitrine au banc ou l'exercice ne compte pas.</li>
+          <li><b>Passer trop vite à la version dure.</b> 20 répétitions ici avant de mettre les mains au sol, et bien plus tard les pieds sur le banc.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Élévations latérales poulie basse, un bras
+        <span class="mus"><b>Deltoïde latéral</b> — le côté de l'épaule</span>
+        <span class="tip">Sentir l'épaule est le but. Cet exercice ne doit rien te faire à la poitrine.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">6 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-3</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 1 · par bras</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">45 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Poignée simple sur la poulie basse, plaque 1. Debout à côté de la machine, le câble passe devant tes jambes, poignée dans la main opposée.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Pouce vers le haut, bras quasi tendu, coude à peine fléchi.</li>
+          <li>Monte sur le côté <b>jusqu'à l'horizontale et pas plus haut</b>.</li>
+          <li>1 seconde de pause en haut.</li>
+          <li>3 secondes pour redescendre en freinant. <b>Gauche d'abord</b> : son nombre de répétitions fixe celui du droit.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Monter au-dessus de l'horizontale.</b> Au-delà, ce sont les trapèzes qui prennent le relais.</li>
+          <li><b>Donner un coup de reins pour lancer le bras.</b> Si tu as besoin d'élan, c'est trop lourd.</li>
+          <li><b>Hausser l'épaule.</b> L'épaule reste basse, seul le bras monte.</li>
+          <li><b>Laisser le droit en faire plus.</b> C'est ce qui creuse l'écart au lieu de le refermer.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name"><b>Superset</b> — Triceps poulie haute
+        <span class="mus"><b>Triceps</b></span>
+        <span class="tip">Enchaîné sans repos avec l'exercice suivant.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-0-1</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 3-5</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">0 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Corde ou barre sur la poulie haute. Debout face à la machine, un pied légèrement devant l'autre, buste très légèrement penché.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Coudes collés au corps, ils restent fixes pendant toute la série.</li>
+          <li>Pousse vers le bas jusqu'à tendre les bras.</li>
+          <li>Reviens en freinant jusqu'à ce que l'avant-bras soit à l'horizontale.</li>
+          <li>Enchaîne immédiatement sur l'extension corde, sans repos.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Les coudes qui partent vers l'avant ou s'écartent.</b> Ce sont les épaules et le dos qui aident. Coudes vissés aux côtes.</li>
+          <li><b>Se pencher pour pousser avec le poids du corps.</b> Buste stable, seuls les avant-bras bougent.</li>
+        </ul>
+      </details>
+    </div>
+    <div class="ex e">
+      <div class="name"><b>Superset</b> — Extension triceps corde, poulie basse au-dessus de la tête
+        <span class="mus"><b>Triceps, longue portion</b></span>
+        <span class="tip">Enchaîné sans repos après la poulie haute, puis 60 s après le couple.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">3-0-1</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 3-5</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Corde sur la poulie basse. Tourne le <b>dos à la machine</b>, corde ramenée derrière la nuque, un pied devant l'autre pour la stabilité.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Coudes pointés vers l'avant et serrés, le plus près possible des oreilles.</li>
+          <li>Tends les bras vers le haut et l'avant en 1 seconde.</li>
+          <li>3 secondes pour revenir, jusqu'à sentir l'étirement derrière le bras.</li>
+          <li>C'est cette position bras au-dessus de la tête qui travaille la longue portion, celle que la poulie haute ne touche pas.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Les coudes qui s'écartent en V.</b> Le plus courant. Demande-toi de les garder parallèles.</li>
+          <li><b>Cambrer le bas du dos.</b> Serre le ventre, un pied devant l'autre.</li>
+          <li><b>Charger trop.</b> Cette position est mécaniquement défavorable, c'est normal d'y être plus faible qu'à la poulie haute.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="blk"><span>Bloc escrime</span><i></i></div>
+
+    <div class="ex b">
+      <div class="name">Rotation externe épaule, léger
+        <span class="mus"><b>Coiffe des rotateurs</b></span>
+        <span class="tip">Première dose de la semaine pour la coiffe. Jamais lourd.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">2 × 20</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">3-0-3</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 1</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">30 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Poignée à hauteur de coude sur la poulie, le câble arrive de côté. Coude collé au flanc, plié à 90°.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Coude vissé contre les côtes, il ne décolle jamais — glisse une serviette dessous si tu doutes.</li>
+          <li>Fais pivoter l'avant-bras vers l'extérieur en 3 secondes, comme une porte qui s'ouvre.</li>
+          <li>Reviens en 3 secondes, tout aussi lentement.</li>
+          <li>Plaque 1. Ce muscle est petit, il n'a pas besoin de charge.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Décoller le coude du corps.</b> L'exercice ne travaille plus la coiffe.</li>
+          <li><b>Aller vite.</b> Tout le bénéfice est dans la lenteur et le contrôle.</li>
+          <li><b>Charger pour progresser.</b> Ici on entretient une articulation, on ne construit pas un muscle.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex f">
+      <div class="name">Planche + planche latérale
+        <span class="mus"><b>Gainage</b> · obliques</span>
+        <span class="tip">Gainage. La qualité de la position prime sur la durée.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">2 × 45 s</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">—</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">30 s / côté</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">30 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Avant-bras au sol, coudes sous les épaules, pieds à largeur de hanches.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Planche classique 45 secondes : corps parfaitement droit de la tête aux talons.</li>
+          <li>Serre les fessiers et rentre légèrement le bassin, ventre contracté.</li>
+          <li>Puis planche latérale 30 secondes de chaque côté, sur un avant-bras, hanches hautes.</li>
+          <li>Respire normalement pendant tout le maintien.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Les fesses en l'air.</b> Position confortable et inutile. Descends le bassin en ligne.</li>
+          <li><b>Le bas du dos qui creuse.</b> Signe que le ventre a lâché : arrête-toi là, la série est finie.</li>
+          <li><b>Bloquer sa respiration.</b> Si tu ne peux pas parler, la position est trop dure.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= SÉANCE B ================= -->
+  <section class="panel" id="p-B" role="tabpanel" hidden>
+    <h2 class="ptitle" style="margin-top:0">B — Dos, biceps, arrière d'épaule</h2>
+    <p class="pmeta">Jeudi · 60 min</p>
+    <details class="fold"><summary>Échauffement</summary>
+      <p>5 min cardio, 2 séries légères de tirage vertical.</p>
+    </details>
+
+    <div class="ex e">
+      <div class="name">Tirage vertical, prise large
+        <span class="mus"><b>Grand dorsal</b> · biceps</span>
+        <span class="tip">Prise sans pouce : le pouce passe du même côté que les doigts.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 8-12</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 4-6</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">90 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Barre en prise large, mains plus écartées que les épaules. Assis, cuisses bloquées sous les cales, buste très légèrement incliné en arrière.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li><b>Prise crochet</b> : pouce par-dessus la barre, du même côté que les doigts. La main ne peut plus serrer.</li>
+          <li>Sors la poitrine et abaisse les épaules avant de tirer.</li>
+          <li>Tire en amenant <b>les coudes vers les hanches</b>, pas la barre vers le menton. Barre au haut de la poitrine.</li>
+          <li>1 seconde d'omoplates serrées, puis 2 secondes pour remonter en freinant.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Le biceps et l'avant-bras gauches qui chauffent.</b> C'est le serrage de la main. La prise sans pouce est le correctif direct.</li>
+          <li><b>Tirer la barre derrière la nuque.</b> Inutile et risqué pour l'épaule. Toujours devant.</li>
+          <li><b>Se balancer d'avant en arrière.</b> Le buste bouge à peine, c'est le dos qui travaille.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Rowing un bras, poulie basse, en fente
+        <span class="mus"><b>Milieu du dos</b> · grand dorsal</span>
+        <span class="tip">C'est ici que ton dos gauche réapprend à tirer seul.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 10-12</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 3-5 · par bras</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">75 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Poignée simple sur la poulie basse. Debout face à la machine, <b>un pied devant l'autre</b>, l'avant-bras libre en appui sur la cuisse avant.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Buste penché à environ 45°, dos plat, jamais arrondi.</li>
+          <li>Tire la poignée vers la hanche, le coude longe les côtes vers l'arrière.</li>
+          <li>1 seconde d'omoplate serrée en arrière et vers le bas.</li>
+          <li>Retour freiné en 2 secondes, sans laisser l'épaule partir vers l'avant. <b>Gauche d'abord.</b></li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Tourner le buste pour aller chercher plus loin.</b> Les épaules restent parallèles au sol.</li>
+          <li><b>Tirer avec la main.</b> Pense « je pousse mon coude vers l'arrière », la main ne fait que tenir.</li>
+          <li><b>Arrondir le dos.</b> Poitrine sortie, regard vers le sol un mètre devant toi.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Pull-over poulie haute, bras tendus
+        <span class="mus"><b>Grand dorsal</b> — sans les biceps</span>
+        <span class="tip">Coudes verrouillés du début à la fin. Si tu sens les triceps, ils se plient.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-0-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 2-3</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Corde ou barre sur la poulie haute. Debout à un pas de la machine, buste légèrement penché en avant, pieds ancrés.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Bras tendus devant toi, coudes <b>verrouillés</b> : ils deviennent un bloc rigide.</li>
+          <li>Le seul mouvement autorisé vient de l'épaule.</li>
+          <li>Ramène les mains vers les cuisses en 2 secondes, en sentant le côté du dos se contracter.</li>
+          <li>Reviens en 2 secondes bras à l'horizontale.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Sentir les triceps.</b> Preuve que tes coudes se plient et se déplient : tu fais une extension triceps.</li>
+          <li><b>Trop charger.</b> Le bras tendu est un très long levier, la charge utile est faible.</li>
+          <li><b>Se redresser pendant l'effort.</b> L'inclinaison du buste ne bouge pas.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Curl à la poulie basse, barre droite
+        <span class="mus"><b>Biceps</b></span>
+        <span class="tip">Coudes collés au corps, ils ne partent pas vers l'avant.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">5 × 10-12</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-0-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 4-6</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Barre droite sur la poulie basse. Debout, pieds à largeur de hanches, bras le long du corps.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Coudes vissés aux côtes, ils restent le point de pivot.</li>
+          <li>Monte la barre en 2 secondes en fermant le coude.</li>
+          <li>Contracte en haut sans monter les coudes.</li>
+          <li>Redescends en 2 secondes jusqu'à bras presque tendus.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Les coudes qui avancent en fin de montée.</b> Le mouvement devient un tirage d'épaule et le biceps se repose.</li>
+          <li><b>Se pencher en arrière pour lancer la barre.</b> Si tu as besoin d'élan, allège.</li>
+          <li><b>Ne pas descendre complètement.</b> La partie basse est celle qui fait grossir le bras.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Curl marteau haltères
+        <span class="mus"><b>Biceps</b> · avant-bras</span>
+        <span class="tip">Paumes face à face, comme si tu tenais un marteau.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-0-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">2 × 10 kg</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">45 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Un haltère dans chaque main, bras le long du corps, paumes tournées vers tes cuisses.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Garde la paume tournée vers l'intérieur pendant tout le mouvement — pas de rotation.</li>
+          <li>Monte en 2 secondes, coudes fixes le long du corps.</li>
+          <li>Redescends en 2 secondes.</li>
+          <li>Tu peux alterner les bras ou monter les deux ensemble.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Tourner le poignet en montant.</b> Ce serait un curl classique — ici la prise neutre est le point.</li>
+          <li><b>Balancer les haltères.</b> Buste immobile, seuls les avant-bras bougent.</li>
+          <li><b>Écarter les coudes.</b> Ils restent contre les flancs.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="blk"><span>Bloc escrime</span><i></i></div>
+
+    <div class="ex f">
+      <div class="name">Face pull à la corde
+        <span class="mus"><b>Arrière d'épaule</b> · trapèze moyen · coiffe</span>
+        <span class="tip">Jamais lourd. La qualité avant la charge.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 15-20</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 2-3</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">45 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Corde sur la poulie à hauteur de visage. Recule d'un ou deux pas pour mettre le câble en tension, un pied devant l'autre.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Prends la corde, paumes face à face, bras tendus devant toi.</li>
+          <li>Tire la corde <b>vers ton visage</b> en écartant les mains vers l'extérieur en fin de course.</li>
+          <li>En fin de mouvement, tes mains sont de chaque côté de ta tête, coudes hauts.</li>
+          <li>1 seconde de contraction, retour freiné en 2 secondes.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Tirer vers la poitrine.</b> Ce serait un rowing. La corde vient au niveau des yeux.</li>
+          <li><b>Ne pas écarter les mains.</b> C'est justement l'écartement qui travaille l'arrière d'épaule.</li>
+          <li><b>Charger.</b> Trop lourd, tu tires avec le dos et l'exercice ne sert plus à rien.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex f">
+      <div class="name">Rotation externe épaule, coude au corps
+        <span class="mus"><b>Coiffe des rotateurs</b></span>
+        <span class="tip">Deuxième dose de coiffe de la semaine. Une série de plus sur le bras d'arme.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">3-0-3</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 1-2</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">45 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Poignée à hauteur de coude, câble arrivant de côté. Coude collé au flanc, plié à 90°.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Coude vissé contre les côtes pendant toute la série.</li>
+          <li>Ouvre l'avant-bras vers l'extérieur en 3 secondes.</li>
+          <li>Reviens en 3 secondes, sans laisser le câble te ramener.</li>
+          <li>Ajoute une série sur ton bras d'arme, le droit.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Décoller le coude.</b> L'épaule compense et la coiffe ne travaille plus.</li>
+          <li><b>Tourner le buste au lieu de l'épaule.</b> Le tronc reste face à l'avant.</li>
+          <li><b>Charger.</b> Plaques 1-2, pas plus, quelle que soit ta progression ailleurs.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex f">
+      <div class="name">Shrugs à la poulie basse
+        <span class="mus"><b>Trapèzes</b> · prise</span>
+        <span class="tip">Épaules vers les oreilles, 2 secondes de tenue en haut.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">1-2-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 6-8</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+
+    <div class="ex b">
+      <div class="name">Flexion et extension de poignet
+        <span class="mus"><b>Avant-bras</b></span>
+        <span class="tip">Placé en dernier volontairement : c'est celui-là que tu sautes si le temps manque.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">2 × 15-20</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-0-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">10 kg</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">45 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Barre droite sur la poulie basse, bras tendus le long du corps, debout bien droit.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Bras tendus et passifs : ils ne font que porter la barre.</li>
+          <li>Monte les épaules droit vers les oreilles, sans rien plier.</li>
+          <li><b>2 secondes de tenue en haut</b>, c'est là que tout se joue.</li>
+          <li>Redescends lentement jusqu'à sentir l'étirement du trapèze.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Plier les coudes.</b> Tu transformes l'exercice en tirage.</li>
+          <li><b>Rouler les épaules en cercle.</b> Aucun bénéfice, et l'articulation n'aime pas. Monte et descends, en ligne droite.</li>
+          <li><b>Ne pas marquer le temps en haut.</b> Sans la tenue, le trapèze ne travaille presque pas.</li>
+        </ul>
+      </details>
+
+        <p class="g-lab">Mise en place</p>
+        <p>Assis, avant-bras posé à plat sur la cuisse, poignet et main dans le vide au-delà du genou.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Paume vers le haut : laisse le poignet descendre, puis remonte l'haltère en fermant le poignet. 15 à 20 fois.</li>
+          <li>Retourne l'avant-bras, paume vers le bas : même mouvement dans l'autre sens.</li>
+          <li>L'avant-bras ne décolle jamais de la cuisse.</li>
+          <li>Amplitude complète dans les deux sens, lentement.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Bouger le coude ou l'épaule.</b> Seul le poignet travaille.</li>
+          <li><b>Aller trop vite.</b> Petits muscles, petites amplitudes : la lenteur est obligatoire.</li>
+        </ul>
+      </details>
+    </div>
+    </div>
+  </section>
+
+  <!-- ================= SÉANCE C ================= -->
+  <section class="panel" id="p-C" role="tabpanel" hidden>
+    <h2 class="ptitle" style="margin-top:0">C — Jambes et chaîne postérieure</h2>
+    <p class="pmeta">Samedi · 55 min · 72 h de récupération avant l'escrime du mardi</p>
+    <p class="alert"><b>Pas de travail explosif pour l'instant.</b> Les montées sur le banc sont retirées : impraticables chez toi, et de toute façon prématurées. La puissance se construit sur une base de force qui n'existe pas encore. <b>On la réintroduira à la mi-octobre</b>, avec le squat sauté si la place et le voisinage le permettent. En attendant, c'est l'<b>extension de hanche à la poulie</b> qui prend la place. Elle ne remplace pas les quadriceps perdus — la HG100 n'a aucun poste de squat — mais elle comble un vrai trou : rien dans le programme ne travaillait l'extension de hanche, donc les fessiers.</p>
+    <details class="fold rouge"><summary>Échauffement obligatoire</summary>
+      <p>5 min cardio, 20 fentes à vide, 20 ponts fessiers, 10 rotations de hanche par côté.</p>
+    </details>
+
+    <div class="ex b">
+      <div class="name">Fentes bulgares, pied arrière sur le banc
+        <span class="mus"><b>Quadriceps</b> · fessiers</span>
+        <span class="tip">L'exercice le plus proche de la fente d'escrime. Descente en 3 secondes.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 8-10</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">3-1-1</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">2 × 10 kg</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">90 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Dos au banc, un pied posé dessus derrière toi, dessus du pied ou pointe. Le pied avant est à environ un grand pas du banc.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Vérifie la distance : en bas, ton genou avant doit rester au-dessus de la cheville, pas devant les orteils.</li>
+          <li>Descends en <b>3 secondes</b>, buste droit, jusqu'à ce que la cuisse avant soit parallèle au sol.</li>
+          <li>1 seconde en bas.</li>
+          <li>Remonte en 1 seconde en poussant dans le talon avant.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Se placer trop près du banc.</b> Le genou part loin devant et tire sur l'articulation. Recule ton pied avant.</li>
+          <li><b>Pousser sur la jambe arrière.</b> Elle ne sert qu'à l'équilibre, tout le travail vient de la jambe avant.</li>
+          <li><b>Se pencher en avant.</b> Buste vertical, regard devant.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex b">
+      <div class="name">Extension de hanche, poulie basse et sangle de cheville
+        <span class="mus"><b>Fessiers</b> · ischio-jambiers</span>
+        <span class="tip">Le genou ne se plie jamais — c'est toute la différence avec le leg curl.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 2-4 · par jambe</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Sangle à une cheville, poulie basse. Debout <b>face à la machine</b>, tu tiens le montant à deux mains, buste légèrement penché en avant.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Jambe tendue, genou verrouillé.</li>
+          <li>Recule la jambe le plus loin possible derrière toi.</li>
+          <li><b>Serre la fesse</b> en fin de mouvement, 1 seconde.</li>
+          <li>Retour freiné en 2 secondes. Gauche d'abord.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Plier le genou.</b> Tu fais alors un leg curl, et les fessiers ne travaillent plus.</li>
+          <li><b>Cambrer le bas du dos pour aller plus loin.</b> L'amplitude vient de la hanche, pas de la colonne. Serre le ventre.</li>
+          <li><b>Charger trop.</b> Si tu dois te tortiller, allège d'une plaque.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex b">
+      <div class="name">Leg extension, poste leg developer
+        <span class="mus"><b>Quadriceps</b> — l'avant de la cuisse</span>
+        <span class="tip">Les deux jambes ensemble. Charge mesurée : 15 à 20 kg, pas 40.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-3</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 3-4</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">75 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Assis, dossier réglé pour que l'arrière des genoux touche le bord du siège. Tibias derrière le rouleau, rouleau juste au-dessus des chevilles.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Tiens les poignées latérales, dos plaqué au dossier.</li>
+          <li>Tends les deux jambes en 2 secondes jusqu'aux genoux droits.</li>
+          <li>1 seconde de contraction en haut, cuisses serrées.</li>
+          <li><b>3 secondes pour redescendre</b> : c'est le quadriceps qui freine ta fente, c'est donc cette phase qui compte.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Décoller les fesses du siège.</b> Signe que c'est trop lourd. Descends d'une plaque.</li>
+          <li><b>Lâcher la descente.</b> Tu perds les trois quarts du bénéfice. Compte les 3 secondes.</li>
+          <li><b>Rouleau trop haut sur le tibia.</b> Il doit être juste au-dessus de la cheville, pas au milieu du mollet.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex b">
+      <div class="name">Leg curl debout, poulie basse et sangle de cheville
+        <span class="mus"><b>Ischio-jambiers</b> — l'arrière de la cuisse</span>
+        <span class="tip">Le talon vers la fesse, cuisse immobile. Seul exercice ischios du programme.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">4 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-3</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 3-5 · par jambe</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Sangle à une cheville, poulie basse. Debout <b>face à la machine</b>, tu tiens le montant, en appui sur l'autre jambe.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Cuisse verticale et immobile : seul le genou se plie.</li>
+          <li>Ramène le talon vers la fesse en 2 secondes.</li>
+          <li>1 seconde de contraction en haut.</li>
+          <li>3 secondes pour redescendre en freinant, sans laisser le câble tirer.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>La cuisse qui recule pendant la flexion.</b> Tu ajoutes de l'extension de hanche et l'ischio perd la tension.</li>
+          <li><b>Cambrer le dos.</b> Serre le ventre et garde le bassin neutre.</li>
+          <li><b>Confondre avec l'extension de hanche.</b> Ici le genou plie, là-bas il reste tendu.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex e">
+      <div class="name">Mollets debout, une jambe à la fois
+        <span class="mus"><b>Mollets</b></span>
+        <span class="tip">Une seule jambe, les deux haltères en main : tu doubles la charge par mollet.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">2 × 10 kg · par jambe</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">45 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Sur une marche ou le bord du banc, l'avant du pied dessus, le talon dans le vide. Les deux haltères dans les mains, une main peut se tenir au mur.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Descends le talon le plus bas possible, 1 seconde d'étirement en bas.</li>
+          <li>Monte sur la pointe le plus haut possible en 2 secondes.</li>
+          <li>1 seconde de contraction en haut.</li>
+          <li>15 répétitions, puis change de jambe.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Amplitude réduite.</b> Le mollet ne répond qu'à l'amplitude complète : talon très bas, pointe très haute.</li>
+          <li><b>Rebondir sur le tendon.</b> Marque l'arrêt en bas, sinon c'est l'élastique du tendon qui travaille, pas le muscle.</li>
+          <li><b>Plier le genou.</b> La jambe reste tendue.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="blk"><span>Bloc escrime</span><i></i></div>
+
+    <div class="ex f">
+      <div class="name">Fente latérale, un haltère contre la poitrine
+        <span class="mus"><b>Adducteurs</b> — l'intérieur de la cuisse · quadriceps</span>
+        <span class="tip">Tu plies une jambe, tu gardes l'autre tendue. L'intérieur de la cuisse tendue s'étire.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 10</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">3-1-1</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">10 kg · par côté</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">60 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Debout, un haltère tenu à deux mains contre la poitrine, pieds parallèles à largeur de hanches.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Fais un <b>grand pas sur le côté</b>, pied bien à plat.</li>
+          <li>Plie cette jambe en 3 secondes en poussant les fesses vers l'arrière, l'autre jambe reste tendue.</li>
+          <li>1 seconde en bas, tu dois sentir l'étirement à l'intérieur de la cuisse tendue.</li>
+          <li>Pousse dans le talon pour revenir. 10 fois d'un côté, puis de l'autre.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Un pas trop court.</b> Sans grand écart, les adducteurs ne s'étirent pas et l'exercice ne sert à rien.</li>
+          <li><b>Le genou qui rentre vers l'intérieur.</b> Il suit la pointe du pied.</li>
+          <li><b>Arrondir le dos en descendant.</b> Poitrine sortie, hanches en arrière.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="ex f">
+      <div class="name">Crunch à la poulie haute, assis ou à genoux
+        <span class="mus"><b>Grands droits</b> — la sangle abdominale</span>
+        <span class="tip">Tu enroules le buste, menton vers le nombril. Ce n'est pas un mouvement de hanche.</span></div>
+      <div class="stats">
+        <div class="st"><span class="lab">séries</span><span class="val">3 × 12-15</span></div>
+        <div class="st"><span class="lab">tempo</span><span class="val">2-1-2</span></div>
+        <div class="st"><span class="lab">charge</span><span class="val">pl. 4-6</span></div>
+        <div class="st"><span class="lab">repos</span><span class="val">45 s</span></div>
+      </div>
+      <details class="guide">
+        <summary>Comment le faire</summary>
+        <p class="g-lab">Mise en place</p>
+        <p>Corde sur la poulie haute. Assis sur le banc dos à la machine, ou à genoux au sol : les deux se valent, l'assis est plus stable.</p>
+        <p class="g-lab">Le mouvement</p>
+        <ol>
+          <li>Corde derrière la nuque, mains qui la tiennent sans tirer.</li>
+          <li><b>Enroule le buste</b> vers les cuisses en arrondissant le dos, menton vers le nombril.</li>
+          <li>1 seconde de contraction, ventre écrasé.</li>
+          <li>Reviens en 2 secondes en déroulant, sans relâcher complètement.</li>
+        </ol>
+        <p class="g-lab">Les pièges</p>
+        <ul class="pieges">
+          <li><b>Basculer depuis les hanches, dos droit.</b> Les abdos ne travaillent pas. C'est la colonne qui doit s'enrouler.</li>
+          <li><b>Tirer avec les bras.</b> Les mains ne font que tenir la corde en place.</li>
+          <li><b>Se relever complètement entre les répétitions.</b> Garde la tension.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <div class="key">
+    <span class="k-e"><i></i>Esthétique</span>
+    <span class="k-f"><i></i>Escrime</span>
+    <span class="k-e"><i style="background:linear-gradient(var(--green),var(--red))"></i>Les deux</span>
+  </div>
+
+  <!-- ================= CHARGES ================= -->
+  <h2>Régler les charges</h2>
+  <div class="card">
+    <p><b>Les plaques ne valent pas la même chose selon le poste.</b> La colonne fait 50 kg, mais les ratios de poulie diffèrent : tirage vertical en 1:1 (tu ressens la valeur affichée), poulies basse et médiane en 2:1 (tu ressens environ la moitié), leg extension et poste développé en 4:1 (encore moins). Ne compare jamais un numéro de plaque d'un poste à l'autre.</p>
+    <p class="note">« pl. 6-8 » veut dire : broche sur la 6<sup>e</sup> à 8<sup>e</sup> plaque de la colonne, soit 30 à 40 kg à raison de 5 kg par plaque. Ce sont des estimations de départ, à corriger dès la première séance.</p>
+    <p class="alert" style="margin-top:14px"><b>Les ratios ci-dessus ne sont pas fiables, ne t'appuie pas dessus.</b> Deux mesures les contredisent : le pec deck était difficile dès la 4<sup>e</sup> plaque, et le leg extension — annoncé en 4:1 — ne passe qu'à 15-20 kg là où la fiche prévoyait 40-50. Si la réduction était réellement de 4 pour 1, ces postes seraient d'une facilité déconcertante. <b>Seul le numéro de plaque que tu mesures compte</b>, poste par poste, séance après séance. Oublie la conversion en kilos ressentis, elle n'apporte rien.</p>
+    <p style="margin-top:16px"><b>Un gros exercice porte toujours beaucoup plus qu'un petit.</b> Le développé pousse avec les pectoraux, les épaules et les triceps réunis, la charge collée au corps. Une élévation latérale, un écarté ou une extension triceps font travailler <b>un seul muscle au bout d'un bras tendu</b> — le bras devient un long levier, et 5 kg au bout d'un levier d'un mètre pèsent bien plus lourd que 5 kg contre la poitrine.</p>
+    <p class="note">Concrètement : sur n'importe quel programme et à n'importe quel niveau, un écarté se fait avec <b>trois à quatre fois moins</b> que le développé, et une élévation latérale reste toute la vie l'exercice le plus léger de la séance. Trouver 4 plaques au développé et 2 en isolation n'est pas un signe de faiblesse : c'est le rapport normal. Le seul chiffre qui te renseigne, c'est l'évolution de <b>ta</b> plaque sur <b>ce</b> poste, semaine après semaine.</p>
+    <p style="margin-top:16px"><b>Semaine 1, tu calibres.</b> Sur chaque exercice, vise 2 répétitions en réserve : à la fin de la série tu aurais pu en faire 2 de plus, pas 5.</p>
+    <ol>
+      <li>Tu pars de l'estimation indiquée et tu fais la série.</li>
+      <li>Trop facile (plus de 4 reps en réserve) : +1 plaque, tu refais.</li>
+      <li>Tu n'atteins pas le bas de la fourchette : −1 plaque.</li>
+      <li>Tu notes le réglage. Ce carnet devient ta référence.</li>
+    </ol>
+  </div>
+
+  <!-- ================= TEMPO ================= -->
+  <h2>Lire le tempo</h2>
+  <div class="card">
+    <p><b>Trois chiffres, trois moments d'une répétition, dans l'ordre où tu les vis.</b> Chaque chiffre est un nombre de secondes.</p>
+    <table style="margin-top:14px">
+      <tr><th style="width:90px">Chiffre</th><th>Ce qu'il compte</th></tr>
+      <tr><td class="n" style="text-align:left">1<sup>er</sup></td><td>La première moitié du mouvement, depuis ta position de départ.</td></tr>
+      <tr><td class="n" style="text-align:left">2<sup>e</sup></td><td>La pause dans la position la plus dure, sans relâcher la tension.</td></tr>
+      <tr><td class="n" style="text-align:left">3<sup>e</sup></td><td>Le retour à la position de départ.</td></tr>
+    </table>
+    <p class="note" style="margin-top:12px">Un <b>0</b> veut dire : aucun arrêt, tu enchaînes. Un <b>—</b> veut dire : pas de tempo imposé, c'est du gainage, un porté ou un mouvement explosif.</p>
+
+    <p style="margin-top:16px"><b>Trois exemples du programme.</b></p>
+    <table class="stack">
+      <tr><th style="width:34%">Exercice</th><th style="width:66px">Tempo</th><th>La répétition</th></tr>
+      <tr><td>Développé pectoraux machine</td><td class="n">2-0-1</td><td>Tu pars bras tendus. 2 s pour amener les poignées à la poitrine, aucun arrêt en bas, 1 s pour repousser.</td></tr>
+      <tr><td>Leg extension</td><td class="n">2-1-3</td><td>Tu pars jambes pliées. 2 s pour tendre, 1 s de contraction en haut, 3 s pour redescendre.</td></tr>
+      <tr><td>Fentes bulgares</td><td class="n">3-1-1</td><td>3 s de descente, 1 s en bas, 1 s pour remonter.</td></tr>
+    </table>
+    <p class="note" style="margin-top:12px">Le chiffre le plus gros est toujours placé sur la phase qui compte le plus pour cet exercice — la descente freinée sur les fentes, la contraction tenue sur le leg extension.</p>
+
+    <p style="margin-top:16px"><b>Compter.</b> Dans ta tête, « mille-un, mille-deux, mille-trois ». Pas besoin de chronomètre, l'ordre de grandeur suffit.</p>
+    <p class="note">Si tu n'arrives pas à tenir le tempo sur les dernières répétitions, la charge est trop lourde. C'est le meilleur détecteur de triche du programme : une série de 12 bâclée en 15 secondes ne vaut pas une série de 8 tenue proprement.</p>
+  </div>
+
+  <!-- ================= SUPERSET ================= -->
+  <h2>Lire les supersets</h2>
+  <div class="card">
+    <p><b>Un superset, ce sont deux exercices enchaînés sans repos entre les deux.</b> Tu fais la série du premier, tu passes immédiatement au second, et c'est seulement après le second que tu souffles. Cet aller-retour compte pour un <b>tour</b>.</p>
+    <p class="note">Dans le programme, les deux lignes portent le même mot <b>Superset</b> : elles se lisent ensemble, pas l'une après l'autre.</p>
+
+    <p style="margin-top:16px"><b>Tout est dans la colonne repos.</b></p>
+    <table class="stack">
+      <tr><th style="width:52%">Ligne</th><th style="width:64px">Repos</th><th>Ce que ça veut dire</th></tr>
+      <tr><td>Triceps poulie haute</td><td class="n">0 s</td><td>Tu ne t'arrêtes pas. Tu enchaînes sur la ligne suivante.</td></tr>
+      <tr><td>Extension triceps corde</td><td class="n">60 s</td><td>Là tu récupères, puis tu repars pour un tour.</td></tr>
+    </table>
+    <p class="note" style="margin-top:12px">Le tour complet : 12 à 15 répétitions de poulie haute, puis tout de suite 12 à 15 d'extension corde, puis 60 s de pause. Tu recommences. Quatre tours, donc huit séries de triceps en tout.</p>
+
+    <p style="margin-top:16px"><b>Pourquoi.</b> Le triceps est un petit muscle qui récupère vite : lui laisser 90 s entre chaque série est du temps perdu. Le superset lui donne deux angles d'affilée — coudes le long du corps, puis bras au-dessus de la tête — et te fait gagner cinq minutes sur la séance.</p>
+    <p class="note">Si tu es essoufflé au point de bâcler le second exercice, ce n'est pas le bon réglage : allège le second, pas le premier.</p>
+  </div>
+
+  <h2>Faire progresser 10 kg fixes</h2>
+  <div class="card">
+    <p>Quand un exercice aux haltères devient facile, tu changes de variable dans cet ordre plutôt que de charge.</p>
+    <table>
+      <tr><td class="n" style="text-align:left; padding-right:14px">1</td><td>Monter jusqu'au haut de la fourchette de répétitions</td></tr>
+      <tr><td class="n" style="text-align:left; padding-right:14px">2</td><td>Ralentir la descente à 4 secondes</td></tr>
+      <tr><td class="n" style="text-align:left; padding-right:14px">3</td><td>Ajouter 2 secondes de pause en position basse</td></tr>
+      <tr><td class="n" style="text-align:left; padding-right:14px">4</td><td>Passer en unilatéral</td></tr>
+      <tr><td class="n" style="text-align:left; padding-right:14px">5</td><td>Augmenter l'amplitude : incliné, déficit, surélévation</td></tr>
+      <tr><td class="n" style="text-align:left; padding-right:14px">6</td><td>Réduire le repos à 45 secondes</td></tr>
+    </table>
+  </div>
+
+  <!-- ================= PROGRESSION ================= -->
+  <h2>Progression sur 12 semaines</h2>
+  <div class="card">
+    <p><b>Double progression.</b> Tu atteins le haut de la fourchette sur toutes tes séries, tu montes d'une plaque la fois suivante, tu retombes en bas de la fourchette, tu recommences à grimper.</p>
+    <table style="margin-top:14px" class="stack">
+      <tr><th style="width:80px">Semaine</th><th>Consigne</th></tr>
+      <tr><td class="n" style="text-align:left">1</td><td>Calibrage. 3 à 4 reps en réserve, aucune série difficile.</td></tr>
+      <tr><td class="n" style="text-align:left">2-5</td><td>Accumulation. 2 reps en réserve, double progression à chaque séance.</td></tr>
+      <tr><td class="n" style="text-align:left">6</td><td>Décharge. Mêmes charges, 2 séries au lieu de 4.</td></tr>
+      <tr><td class="n" style="text-align:left">7-11</td><td>Intensification. 1 rep en réserve sur la dernière série, fourchettes raccourcies de 2 reps.</td></tr>
+      <tr><td class="n" style="text-align:left">12</td><td>Décharge, puis nouveau test des charges.</td></tr>
+    </table>
+    <p class="note" style="margin-top:14px">Cale la décharge de la semaine 6 sur une compétition ou un stage si ton calendrier le permet.</p>
+    <p class="note" style="margin-top:10px">À noter dans le carnet : <span style="color:var(--ink)">date · plaque · reps de chaque série · reps en réserve</span>. Par exemple : 12/09 · tirage vertical · pl. 6 · 12/11/10/9 · RIR 1.</p>
+  </div>
+
+  <!-- ================= VOLUME ================= -->
+  <!-- ================= CALENDRIER ================= -->
+  <h2>Le cycle, en vrai</h2>
+  <div class="card">
+    <p><b>Départ le lundi 31 août 2026</b>, séance A. Le cycle de 12 semaines tombe comme ceci.</p>
+    <table style="margin-top:14px" class="stack">
+      <tr><th style="width:130px">Semaine</th><th style="width:34%">Dates</th><th>Phase</th></tr>
+      <tr><td class="n" style="text-align:left">1</td><td>31 août – 6 sept</td><td>Calibrage. Tu cherches tes plaques, rien de difficile.</td></tr>
+      <tr><td class="n" style="text-align:left">2 à 5</td><td>7 sept – 4 oct</td><td>Accumulation. C'est ici que les charges montent le plus vite.</td></tr>
+      <tr><td class="n" style="text-align:left">6</td><td>5 – 11 oct</td><td><b>Décharge.</b> Mêmes charges, 2 séries au lieu de 4.</td></tr>
+      <tr><td class="n" style="text-align:left">7 à 11</td><td>12 oct – 15 nov</td><td>Intensification. 1 répétition en réserve sur la dernière série.</td></tr>
+      <tr><td class="n" style="text-align:left">12</td><td>16 – 22 nov</td><td><b>Décharge et retest.</b> Fin du cycle.</td></tr>
+    </table>
+    <p class="note" style="margin-top:12px">63 séances de musculation au total, plus l'escrime. Rater deux séances sur douze semaines ne change rien ; en rater une sur trois change tout.</p>
+  </div>
+
+  <!-- ================= ATTENTES ================= -->
+  <h2>Ce que tu peux attendre</h2>
+  <div class="card">
+    <p><b>Ces repères valent si tu manges assez.</b> Le programme construit le stimulus, l'assiette fournit la matière. Sans environ 1,6 g de protéines par kilo de poids de corps et par jour et un léger surplus calorique, tu deviendras plus fort sans devenir plus gros — c'est un résultat, mais pas celui que tu vises.</p>
+    <table style="margin-top:14px" class="stack">
+      <tr><th style="width:120px">Période</th><th style="width:38%">Ce qui bouge</th><th>Ce qui ne bouge pas encore</th></tr>
+      <tr><td><b>Mois 1</b><br><span class="mute">septembre</span></td><td>Les charges, beaucoup : 30 à 50 % de plus sur les tirages et le leg extension. La technique se met en place. Courbatures fortes les deux premières semaines, puis elles s'estompent.</td><td>Le miroir. Presque rien de visible, et c'est normal — le premier mois, tu apprends à recruter des muscles que tu as déjà.</td></tr>
+      <tr><td><b>Mois 2</b><br><span class="mute">octobre</span></td><td>Les épaules et le haut du dos s'épaississent au toucher. La garde tient mieux en fin d'assaut. 1 à 2 kg sur la balance, dont peut-être 0,5 à 1 kg de muscle.</td><td>Les bras et les pectoraux, qui restent en retard : ils démarrent d'un volume hebdomadaire plus modeste.</td></tr>
+      <tr><td><b>Mois 3</b><br><span class="mute">novembre</span></td><td>Le premier moment où quelqu'un d'autre peut le remarquer, en général sur les épaules et le trapèze. Certaines charges ont doublé depuis le départ. Fente d'escrime nettement plus stable.</td><td>La silhouette d'ensemble, qui demande plus de trois mois quelle que soit la méthode.</td></tr>
+      <tr><td><b>Mois 4 à 6</b><br><span class="mute">déc. – févr.</span></td><td>Progression bien plus lente. Cumul réaliste sur six mois avec une alimentation correcte : 3 à 5 kg de muscle, 1,5 à 2,5 cm de tour de bras, des épaules visiblement plus larges.</td><td>Le matériel. C'est là que la colonne de 50 kg et les haltères de 10 kg deviennent le facteur limitant, pas toi.</td></tr>
+    </table>
+    <p class="note" style="margin-top:12px">Le seul indicateur fiable au mois 1 est le carnet, pas la balance ni le miroir. Si les chiffres montent, le programme fonctionne, même quand tu ne vois rien.</p>
+  </div>
+
+  <h2>Volume hebdomadaire</h2>
+  <div class="card">
+    <table>
+      <tr><th>Groupe</th><th class="n">Séries</th><th class="n" style="width:90px">Fréquence</th></tr>
+      <tr><td>Pectoraux</td><td class="n">13</td><td class="n">1</td></tr>
+      <tr><td>Dos</td><td class="n">11</td><td class="n">1</td></tr>
+      <tr><td>Biceps</td><td class="n">9</td><td class="n">1</td></tr>
+      <tr><td>Triceps</td><td class="n">8</td><td class="n">1</td></tr>
+      <tr><td>Arrière d'épaule et coiffe</td><td class="n">8</td><td class="n">2</td></tr>
+      <tr><td>Quadriceps</td><td class="n">8</td><td class="n">1</td></tr>
+      <tr><td>Ischios et fessiers</td><td class="n">7</td><td class="n">1</td></tr>
+      <tr><td>Deltoïdes latéraux</td><td class="n">6</td><td class="n">1</td></tr>
+      <tr><td>Abdominaux et gainage</td><td class="n">5</td><td class="n">2</td></tr>
+      <tr><td>Mollets</td><td class="n">3</td><td class="n">1</td></tr>
+      <tr><td>Trapèzes</td><td class="n">3</td><td class="n">1</td></tr>
+      <tr><td>Adducteurs</td><td class="n">3</td><td class="n">1</td></tr>
+      <tr><td>Avant-bras</td><td class="n">2</td><td class="n">1</td></tr>
+      <tr><td>Lombaires</td><td class="n">0</td><td class="n">—</td></tr>
+    </table>
+    <p class="alert" style="margin-top:14px"><b>Un seul groupe n'est pas couvert : les lombaires.</b> Le soulevé de terre roumain était le seul exercice qui les travaillait, et il a été retiré. L'extension de hanche à la poulie prend en charge les fessiers, pas les muscles qui redressent la colonne. Pour un sport de fentes répétées, c'est le trou à combler en priorité — deux séries d'extensions lombaires au sol suffiraient.</p>
+    <p class="note" style="margin-top:10px">Les séries comptées sont celles où le muscle est la cible principale. Les deltoïdes antérieurs, par exemple, n'apparaissent nulle part alors qu'ils travaillent sur les treize séries de pectoraux.</p>
+  </div>
+
+  <!-- ================= ALERTES ================= -->
+  <h2>Quand lever le pied</h2>
+  <div class="card">
+    <table class="stack">
+      <tr><th style="width:45%">Signe</th><th>Ce que tu fais</th></tr>
+      <tr><td>Courbatures aux jambes le mardi</td><td>Fentes bulgares à 3 séries au lieu de 4.</td></tr>
+      <tr><td>Performance en baisse deux séances de suite</td><td>Une série de moins par exercice pendant une semaine.</td></tr>
+      <tr><td>Sommeil dégradé, irritabilité</td><td>Coupe la séance B de la semaine et reprends-la la suivante.</td></tr>
+      <tr><td>Gêne à l'épaule du bras armé qui dure</td><td>Avis d'un kiné du sport, pas un ajustement de programme.</td></tr>
+      <tr><td>Tu ne peux tenir que 2 séances</td><td>Garde A et C. Ce sont les deux qui portent le plus de volume.</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab');
+  function show(id){
+    tabs.forEach(function(t){
+      var on = t.dataset.t === id;
+      t.setAttribute('aria-selected', on);
+      document.getElementById('p-' + t.dataset.t).hidden = !on;
+    });
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ show(t.dataset.t); }); });
+  document.querySelectorAll('.day.lift').forEach(function(d){
+    d.addEventListener('click', function(){
+      show(d.dataset.t);
+      document.querySelector('.tabs').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  // marque le jour courant et ouvre la séance du jour
+  var map = {1:'A', 4:'B', 6:'C'};
+  var cells = document.querySelectorAll('#piste .day');
+  var idx = [1,2,3,4,5,6,0];
+  var today = new Date().getDay();
+  cells[idx.indexOf(today)].classList.add('today');
+  if (map[today]) show(map[today]);
+})();
+</script>
+
+</body>
+</html>
