@@ -119,6 +119,12 @@ details.echauf .corps-ech p{margin:0 0 8px}
 details.echauf .corps-ech p:last-child{margin-bottom:0}
 details.echauf b{color:var(--ink)}
 
+/* ---------- rappel des exercices a un bras / une jambe ---------- */
+.uni-note{margin:0 0 10px; padding:9px 11px; border-left:3px solid var(--blue);
+  background:var(--wash-b); border-radius:0 8px 8px 0; font-size:13px;
+  line-height:1.45; color:var(--mute)}
+.uni-note b{color:var(--ink)}
+
 /* ---------- minuteur de repos ---------- */
 .chrono{display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;
   background:var(--paper); border:1px solid var(--line); border-radius:4px;
@@ -294,7 +300,7 @@ var PROG = {
  ]},
  B:{court:"Dos", jour:4, echauf:"<p>5 min cardio, 2 séries légères de tirage vertical. <b>Puis, pour le genou :</b> 2 × 12 pas chassés avec l'élastique au-dessus des genoux, en demi-flexion. Trente secondes, et c'est ton rendez-vous fessier du jour.</p>", exos:[
   {nom:"Tirage vertical, prise large", mus:"Grand dorsal · biceps", series:"4 × 8-12", charge:"pl. 4-6", repos:"90 s", cle:"Prise sans pouce : le pouce passe du même côté que les doigts.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Barre en prise large, mains plus écartées que les épaules. Assis, cuisses bloquées sous les cales, buste très légèrement incliné en arrière.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li><b>Prise crochet</b> : pouce par-dessus la barre, du même côté que les doigts. La main ne peut plus serrer.</li> <li>Sors la poitrine et abaisse les épaules avant de tirer.</li> <li>Tire en amenant <b>les coudes vers les hanches</b>, pas la barre vers le menton. Barre au haut de la poitrine.</li> <li>1 seconde d'omoplates serrées, puis 2 secondes pour remonter en freinant.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Sur les <b>côtés du dos, sous les aisselles</b>, une sensation large qui descend vers la taille. Si le biceps et l'avant-bras chauffent avant le dos, c'est que tu serres la barre — passe en prise sans pouce.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Le biceps et l'avant-bras gauches qui chauffent.</b> C'est le serrage de la main. La prise sans pouce est le correctif direct.</li> <li><b>Tirer la barre derrière la nuque.</b> Inutile et risqué pour l'épaule. Toujours devant.</li> <li><b>Se balancer d'avant en arrière.</b> Le buste bouge à peine, c'est le dos qui travaille.</li> </ul>"},
-  {nom:"Rowing un bras, poulie basse, en fente", mus:"Milieu du dos · grand dorsal", series:"4 × 10-12", charge:"pl. 3-5 · par bras", repos:"75 s", cle:"C'est ici que ton dos gauche réapprend à tirer seul.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Poignée simple sur la poulie basse. Debout face à la machine, <b>un pied devant l'autre</b>, l'avant-bras libre en appui sur la cuisse avant.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Buste penché à environ 45°, dos plat, jamais arrondi.</li> <li>Tire la poignée vers la hanche, le coude longe les côtes vers l'arrière.</li> <li>1 seconde d'omoplate serrée en arrière et vers le bas.</li> <li>Retour freiné en 2 secondes, sans laisser l'épaule partir vers l'avant. <b>Gauche d'abord.</b></li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p><b>Entre l'omoplate et la colonne</b>, du côté qui tire, avec l'omoplate qui se serre vers l'intérieur en fin de mouvement. Le biceps participe un peu, mais il ne doit jamais lâcher avant le dos.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Tourner le buste pour aller chercher plus loin.</b> Les épaules restent parallèles au sol.</li> <li><b>Tirer avec la main.</b> Pense « je pousse mon coude vers l'arrière », la main ne fait que tenir.</li> <li><b>Arrondir le dos.</b> Poitrine sortie, regard vers le sol un mètre devant toi.</li> </ul>"},
+  {nom:"Rowing un bras, poulie basse, en fente", mus:"Milieu du dos · grand dorsal", series:"4 × 10-12", charge:"pl. 3-5 · par bras", repos:"75 s", cle:"C'est ici que ton dos gauche réapprend à tirer seul.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Poignée simple sur la poulie basse. Debout face à la machine, <b>un pied devant l'autre</b>, l'avant-bras libre en appui sur la cuisse avant.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Buste penché à environ 45°, dos plat, jamais arrondi.</li> <li>Tire la poignée vers la hanche, le coude longe les côtes vers l'arrière.</li> <li>1 seconde d'omoplate serrée en arrière et vers le bas.</li> <li>Retour freiné en 2 secondes, sans laisser l'épaule partir vers l'avant. <b>Gauche d'abord.</b></li> <li>Enchaîne le bras droit dès que le gauche a fini. <b>Souffle 20 à 30 secondes entre les deux</b> si tu es essoufflé : ici c'est le placement en fente qui fatigue, pas seulement le dos. Le repos complet ne vient qu'après les deux bras.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p><b>Entre l'omoplate et la colonne</b>, du côté qui tire, avec l'omoplate qui se serre vers l'intérieur en fin de mouvement. Le biceps participe un peu, mais il ne doit jamais lâcher avant le dos.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Tourner le buste pour aller chercher plus loin.</b> Les épaules restent parallèles au sol.</li> <li><b>Tirer avec la main.</b> Pense « je pousse mon coude vers l'arrière », la main ne fait que tenir.</li> <li><b>Arrondir le dos.</b> Poitrine sortie, regard vers le sol un mètre devant toi.</li> </ul>"},
   {nom:"Pull-over poulie haute, bras tendus", mus:"Grand dorsal — sans les biceps", series:"3 × 12-15", charge:"pl. 2-3", repos:"60 s", cle:"Coudes verrouillés du début à la fin. Si tu sens les triceps, ils se plient.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Corde ou barre sur la poulie haute. Debout à un pas de la machine, buste légèrement penché en avant, pieds ancrés.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Bras tendus devant toi, coudes <b>verrouillés</b> : ils deviennent un bloc rigide.</li> <li>Le seul mouvement autorisé vient de l'épaule.</li> <li>Ramène les mains vers les cuisses en 2 secondes, en sentant le côté du dos se contracter.</li> <li>Reviens en 2 secondes bras à l'horizontale.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Sur les <b>côtés du dos, sous les aisselles</b> — exactement la même zone que le tirage vertical, mais sans les bras. Aucun triceps : s'ils chauffent, tes coudes se plient.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Sentir les triceps.</b> Preuve que tes coudes se plient et se déplient : tu fais une extension triceps.</li> <li><b>Trop charger.</b> Le bras tendu est un très long levier, la charge utile est faible.</li> <li><b>Se redresser pendant l'effort.</b> L'inclinaison du buste ne bouge pas.</li> </ul>"},
   {nom:"Curl à la poulie basse, barre droite", mus:"Biceps", series:"5 × 10-12", charge:"pl. 4-6", repos:"60 s", cle:"Coudes collés au corps, ils ne partent pas vers l'avant.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Barre droite sur la poulie basse. Debout, pieds à largeur de hanches, bras le long du corps.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Coudes vissés aux côtes, ils restent le point de pivot.</li> <li>Monte la barre en 2 secondes en fermant le coude.</li> <li>Contracte en haut sans monter les coudes.</li> <li>Redescends en 2 secondes jusqu'à bras presque tendus.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Sur le <b>devant du bras</b>, entre le coude et l'épaule. Si l'avant-bras ou l'épaule prennent le dessus, allège.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Les coudes qui avancent en fin de montée.</b> Le mouvement devient un tirage d'épaule et le biceps se repose.</li> <li><b>Se pencher en arrière pour lancer la barre.</b> Si tu as besoin d'élan, allège.</li> <li><b>Ne pas descendre complètement.</b> La partie basse est celle qui fait grossir le bras.</li> </ul>"},
   {nom:"Curl marteau haltères", mus:"Biceps · avant-bras", series:"4 × 12-15", charge:"2 × 10 kg", repos:"45 s", cle:"Paumes face à face, comme si tu tenais un marteau.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Un haltère dans chaque main, bras le long du corps, paumes tournées vers tes cuisses.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Garde la paume tournée vers l'intérieur pendant tout le mouvement — pas de rotation.</li> <li>Monte en 2 secondes, coudes fixes le long du corps.</li> <li>Redescends en 2 secondes.</li> <li>Tu peux alterner les bras ou monter les deux ensemble.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Sur le devant du bras mais plus vers l'extérieur, et sur le <b>dessus de l'avant-bras</b>. Ici, sentir l'avant-bras est normal — c'est ce qui distingue ce curl du précédent.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Tourner le poignet en montant.</b> Ce serait un curl classique — ici la prise neutre est le point.</li> <li><b>Balancer les haltères.</b> Buste immobile, seuls les avant-bras bougent.</li> <li><b>Écarter les coudes.</b> Ils restent contre les flancs.</li> </ul>"},
@@ -304,7 +310,7 @@ var PROG = {
   {nom:"Flexion et extension de poignet", mus:"Avant-bras", series:"2 × 15-20", charge:"10 kg", repos:"45 s", cle:"Placé en dernier volontairement : c'est celui-là que tu sautes si le temps manque.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Assis, avant-bras posé à plat sur la cuisse, poignet et main dans le vide au-delà du genou.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Paume vers le haut : laisse le poignet descendre, puis remonte l'haltère en fermant le poignet. 15 à 20 fois.</li> <li>Retourne l'avant-bras, paume vers le bas : même mouvement dans l'autre sens.</li> <li>L'avant-bras ne décolle jamais de la cuisse.</li> <li>Amplitude complète dans les deux sens, lentement.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Sur l'<b>avant-bras</b> : dessous quand la paume est vers le haut, dessus quand elle est vers le bas. Rien au coude.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Bouger le coude ou l'épaule.</b> Seul le poignet travaille.</li> <li><b>Aller trop vite.</b> Petits muscles, petites amplitudes : la lenteur est obligatoire.</li> </ul>"}
  ]},
  C:{court:"Jambes", jour:6, echauf:"<p>5 min cardio, 20 ponts fessiers, 10 rotations de hanche par côté, puis <b>20 fentes inversées à vide</b> en surveillant l'alignement du genou droit. Ajoute <b>2 × 15 pas latéraux</b>, genoux légèrement fléchis, pour réveiller le moyen fessier avant de charger.</p>", exos:[
-  {nom:"Fente inversée, pas en arrière", mus:"Quadriceps · fessiers", series:"4 × 8-10", charge:"2 × 10 kg · par jambe", repos:"90 s", cle:"Remplace les fentes bulgares : le tibia reste vertical, le genou ne part pas devant.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Debout, un haltère dans chaque main bras le long du corps, pieds à largeur de hanches. Rien devant toi : c'est vers l'arrière que tu vas.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Fais un <b>grand pas en arrière</b> avec une jambe, et pose la pointe du pied. Le pied avant ne bouge pas de la série.</li> <li>Descends en <b>3 secondes</b> en gardant tout le <b>poids sur le pied avant</b>. Le genou arrière plie parce qu'il descend, pas parce que tu pousses dedans. Le tibia avant reste <b>vertical</b> : ton genou avant ne dépasse jamais tes orteils.</li> <li><b>Arrête-toi aux trois quarts</b>, cuisse avant encore au-dessus de la parallèle, genou arrière à dix centimètres du sol. Tu ne descends pas plus bas, même si tu le peux.</li> <li>1 seconde en bas, puis pousse dans le <b>talon avant</b> pour revenir debout en 1 seconde.</li> <li>Fais les 8 à 10 répétitions de la même jambe avant de changer.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Sur la <b>fesse et l'avant de la cuisse de la jambe avant</b>. Derrière, ça <b>tire</b> sur le devant de la cuisse et l'aine : c'est un étirement, il est normal et sans risque — la hanche s'ouvre, le droit fémoral s'allonge. Ce qui ne doit pas arriver, c'est que ce quadriceps arrière <b>force</b> : s'il travaille, ton poids a glissé en arrière et ta jambe avant ne fait plus rien.</p> <p><b>Le test :</b> en bas, essaie de décoller une seconde la pointe du pied arrière. Si tu y arrives sans perdre l'équilibre, tu es correctement chargé sur l'avant. Si tu tombes, recule le poids sur le talon avant.</p> <p>Au genou avant, <b>sentir quelque chose sans que ce soit douloureux est le but</b>, pas un défaut : c'est comme ça qu'une rotule réapprend à encaisser. Seule une vraie douleur commande de remonter de quelques centimètres — c'est l'amplitude qui fait mal, pas la charge.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Un pas trop court.</b> Le genou avant part vers l'avant et vient écraser la rotule. Recule davantage.</li> <li><b>Descendre trop bas.</b> Au-delà de la parallèle, la pression sous la rotule grimpe d'un coup. Les trois quarts sont une consigne, pas une approximation.</li> <li><b>Le genou avant qui rentre vers l'intérieur.</b> Il doit rester aligné sur la pointe du pied : c'est ce défaut qui entretient le syndrome.</li> <li><b>Pousser sur la jambe arrière pour remonter.</b> Le réflexe naturel, et il vide l'exercice de son intérêt. Tu remontes en poussant dans le talon avant, la jambe arrière ne fait que suivre.</li> <li><b>Charger avant que ce soit indolore.</b> Première séance à vide, mains sur les hanches. Les haltères viennent après.</li> </ul>"},
+  {nom:"Fente inversée, pas en arrière", mus:"Quadriceps · fessiers", series:"4 × 8-10", charge:"2 × 10 kg · par jambe", repos:"90 s", cle:"Remplace les fentes bulgares : le tibia reste vertical, le genou ne part pas devant.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Debout, un haltère dans chaque main bras le long du corps, pieds à largeur de hanches. Rien devant toi : c'est vers l'arrière que tu vas.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Fais un <b>grand pas en arrière</b> avec une jambe, et pose la pointe du pied. Le pied avant ne bouge pas de la série.</li> <li>Descends en <b>3 secondes</b> en gardant tout le <b>poids sur le pied avant</b>. Le genou arrière plie parce qu'il descend, pas parce que tu pousses dedans. Le tibia avant reste <b>vertical</b> : ton genou avant ne dépasse jamais tes orteils.</li> <li><b>Arrête-toi aux trois quarts</b>, cuisse avant encore au-dessus de la parallèle, genou arrière à dix centimètres du sol. Tu ne descends pas plus bas, même si tu le peux.</li> <li>1 seconde en bas, puis pousse dans le <b>talon avant</b> pour revenir debout en 1 seconde.</li> <li>Fais les 8 à 10 répétitions de la même jambe avant de changer.</li> <li><b>Souffle 30 secondes entre les deux jambes.</b> C'est le seul exercice de la séance où la pause entre les côtés est nécessaire : arriver essoufflé sur la deuxième jambe dégrade l'alignement du genou, et c'est précisément ce qu'on cherche à éviter. Le repos complet vient après les deux.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Sur la <b>fesse et l'avant de la cuisse de la jambe avant</b>. Derrière, ça <b>tire</b> sur le devant de la cuisse et l'aine : c'est un étirement, il est normal et sans risque — la hanche s'ouvre, le droit fémoral s'allonge. Ce qui ne doit pas arriver, c'est que ce quadriceps arrière <b>force</b> : s'il travaille, ton poids a glissé en arrière et ta jambe avant ne fait plus rien.</p> <p><b>Le test :</b> en bas, essaie de décoller une seconde la pointe du pied arrière. Si tu y arrives sans perdre l'équilibre, tu es correctement chargé sur l'avant. Si tu tombes, recule le poids sur le talon avant.</p> <p>Au genou avant, <b>sentir quelque chose sans que ce soit douloureux est le but</b>, pas un défaut : c'est comme ça qu'une rotule réapprend à encaisser. Seule une vraie douleur commande de remonter de quelques centimètres — c'est l'amplitude qui fait mal, pas la charge.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Un pas trop court.</b> Le genou avant part vers l'avant et vient écraser la rotule. Recule davantage.</li> <li><b>Descendre trop bas.</b> Au-delà de la parallèle, la pression sous la rotule grimpe d'un coup. Les trois quarts sont une consigne, pas une approximation.</li> <li><b>Le genou avant qui rentre vers l'intérieur.</b> Il doit rester aligné sur la pointe du pied : c'est ce défaut qui entretient le syndrome.</li> <li><b>Pousser sur la jambe arrière pour remonter.</b> Le réflexe naturel, et il vide l'exercice de son intérêt. Tu remontes en poussant dans le talon avant, la jambe arrière ne fait que suivre.</li> <li><b>Charger avant que ce soit indolore.</b> Première séance à vide, mains sur les hanches. Les haltères viennent après.</li> </ul>"},
   {nom:"Extension de hanche, poulie basse et sangle de cheville", mus:"Fessiers · ischio-jambiers", series:"3 × 12-15", charge:"pl. 2-4 · par jambe", repos:"60 s", cle:"Le genou ne se plie jamais — c'est toute la différence avec le leg curl.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Sangle à une cheville, poulie basse. Debout <b>face à la machine</b>, tu tiens le montant à deux mains, buste légèrement penché en avant.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Jambe tendue, genou verrouillé.</li> <li>Recule la jambe le plus loin possible derrière toi.</li> <li><b>Serre la fesse</b> en fin de mouvement, 1 seconde.</li> <li>Retour freiné en 2 secondes. Gauche d'abord.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Franchement dans la <b>fesse</b>, au moment où tu serres en fin de mouvement, et un peu à l'arrière de la cuisse. Si tu sens le bas du dos, tu cambres au lieu d'ouvrir la hanche.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Plier le genou.</b> Tu fais alors un leg curl, et les fessiers ne travaillent plus.</li> <li><b>Cambrer le bas du dos pour aller plus loin.</b> L'amplitude vient de la hanche, pas de la colonne. Serre le ventre.</li> <li><b>Charger trop.</b> Si tu dois te tortiller, allège d'une plaque.</li> </ul>"},
   {nom:"Leg extension, poste leg developer", mus:"Quadriceps — l'avant de la cuisse", series:"4 × 12-15", charge:"pl. 3-4", repos:"75 s", cle:"Les deux jambes ensemble. Charge mesurée : 15 à 20 kg, pas 40.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Assis, dossier réglé pour que l'arrière des genoux touche le bord du siège. Tibias derrière le rouleau, rouleau juste au-dessus des chevilles.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Tiens les poignées latérales, dos plaqué au dossier.</li> <li>Tends les deux jambes en 2 secondes, mais <b>arrête-toi avant le verrouillage</b> : jambes presque droites, jamais complètement. C'est le dernier quart d'extension qui écrase le plus la rotule.</li> <li>1 seconde de contraction en haut, cuisses serrées.</li> <li><b>3 secondes pour redescendre</b> : c'est le quadriceps qui freine ta fente, c'est donc cette phase qui compte.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>Sur le <b>dessus de la cuisse</b>, du genou à la hanche, avec une brûlure qui s'installe série après série. <b>Rien sous la rotule</b> : si ça pince en fin d'extension, réduis encore l'amplitude haute avant de toucher à la charge.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>Décoller les fesses du siège.</b> Signe que c'est trop lourd. Descends d'une plaque.</li> <li><b>Lâcher la descente.</b> Tu perds les trois quarts du bénéfice. Compte les 3 secondes.</li> <li><b>Rouleau trop haut sur le tibia.</b> Il doit être juste au-dessus de la cheville, pas au milieu du mollet.</li> <li><b>Verrouiller les genoux en haut.</b> Le geste réflexe, et le pire pour toi. Garde toujours un léger angle.</li> </ul>"},
   {nom:"Leg curl debout, poulie basse et sangle de cheville", mus:"Ischio-jambiers — l'arrière de la cuisse", series:"4 × 12-15", charge:"pl. 3-5 · par jambe", repos:"60 s", cle:"Le talon vers la fesse, cuisse immobile. Seul exercice ischios du programme.", guide:"<p class=\"g-lab\">Mise en place</p> <p>Sangle à une cheville, poulie basse. Debout <b>face à la machine</b>, tu tiens le montant, en appui sur l'autre jambe.</p> <p class=\"g-lab\">Le mouvement</p> <ol> <li>Cuisse verticale et immobile : seul le genou se plie.</li> <li>Ramène le talon vers la fesse en 2 secondes.</li> <li>1 seconde de contraction en haut.</li> <li>3 secondes pour redescendre en freinant, sans laisser le câble tirer.</li> </ol> <p class=\"g-lab\">Ce que tu dois sentir</p> <p>À l'<b>arrière de la cuisse</b>, entre le genou et la fesse. Si tu sens surtout le mollet, ton pied est trop tendu : laisse la cheville relâchée.</p> <p class=\"g-lab\">Les pièges</p> <ul class=\"pieges\"> <li><b>La cuisse qui recule pendant la flexion.</b> Tu ajoutes de l'extension de hanche et l'ischio perd la tension.</li> <li><b>Cambrer le dos.</b> Serre le ventre et garde le bassin neutre.</li> <li><b>Confondre avec l'extension de hanche.</b> Ici le genou plie, là-bas il reste tendu.</li> </ul>"},
@@ -331,203 +337,18 @@ var RENOMMAGES = {
  "Mollets debout, sur une marche": "Mollets debout, une jambe à la fois"
 };
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, assis ou à genoux",
- "Crunch à la poulie haute, à genoux": "Crunch à la poulie haute, assis ou à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus",
- "Mollets debout, sur une marche": "Mollets debout, une jambe à la fois"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, assis ou à genoux",
- "Crunch à la poulie haute, à genoux": "Crunch à la poulie haute, assis ou à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus",
- "Mollets debout, sur une marche": "Mollets debout, une jambe à la fois"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, assis ou à genoux",
- "Crunch à la poulie haute, à genoux": "Crunch à la poulie haute, assis ou à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus",
- "Mollets debout, sur une marche": "Mollets debout, une jambe à la fois"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, assis ou à genoux",
- "Crunch à la poulie haute, à genoux": "Crunch à la poulie haute, assis ou à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus",
- "Mollets debout, sur une marche": "Mollets debout, une jambe à la fois"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, assis ou à genoux",
- "Crunch à la poulie haute, à genoux": "Crunch à la poulie haute, assis ou à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus",
- "Mollets debout, sur une marche": "Mollets debout, une jambe à la fois"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, assis ou à genoux",
- "Crunch à la poulie haute, à genoux": "Crunch à la poulie haute, assis ou à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus",
- "Mollets debout, sur une marche": "Mollets debout, une jambe à la fois"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Montées sur le banc, explosives": "Montées sur le banc, explosives",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Montées sur le banc, explosives": "Montées sur le banc, explosives",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Montées sur le banc, explosives": "Montées sur le banc, explosives",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Montées sur le banc, explosives": "Montées sur le banc, explosives",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Montées sur le banc, explosives": "Montées sur le banc, explosives",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus"
-};
 
-/* Anciens noms d'exercice -> noms actuels, pour ne pas perdre l'historique. */
-var RENOMMAGES = {
- "Écarté poulie basse, un bras": "Écarté poulie basse, un bras, bas vers haut",
- "Élévations latérales, un bras": "Élévations latérales poulie basse, un bras",
- "Superset — Extension triceps": "Superset — Extension triceps corde, poulie basse au-dessus de la tête",
- "Curl poulie basse, barre droite": "Curl à la poulie basse, barre droite",
- "Rotation externe, coude au corps": "Rotation externe épaule, coude au corps",
- "Fentes bulgares": "Fentes bulgares, pied arrière sur le banc",
- "Montées sur le banc, explosives": "Montées sur le banc, explosives",
- "Leg extension": "Leg extension, poste leg developer",
- "Leg curl debout, sangle": "Leg curl debout, poulie basse et sangle de cheville",
- "Fente latérale, un haltère": "Fente latérale, un haltère contre la poitrine",
- "Crunch à la poulie haute": "Crunch à la poulie haute, à genoux",
- "Pull-over poulie haute": "Pull-over poulie haute, bras tendus"
-};
+
 
 /* ============ LECTURE DES CONSIGNES ============ */
 function lire(s){
@@ -907,6 +728,16 @@ function dessiner(){
 
   if (st.cour < p.n){
     var lab = p.type === "temps" ? "secondes" : "répétitions";
+
+    if (u){
+      var note = document.createElement("p");
+      note.className = "uni-note";
+      note.innerHTML = "Gauche, puis droite <b>sans repos entre les deux</b> : " +
+        "pendant que l'un travaille, l'autre récupère. " +
+        "Le chrono ne démarre qu'une fois les <b>deux côtés</b> validés.";
+      f.appendChild(note);
+    }
+
     var bg = document.createElement("div"); bg.className = "champ";
     var eg = document.createElement("div"); eg.className = "etiq";
     eg.innerHTML = "<span>" + (u ? "Côté gauche" : lab) + "</span><em>série " + (st.cour + 1) + "</em>";
@@ -930,7 +761,8 @@ function dessiner(){
 
     var bv = document.createElement("button");
     bv.className = "valider"; bv.type = "button";
-    bv.textContent = "Valider la série " + (st.cour + 1);
+    bv.textContent = "Valider la série " + (st.cour + 1) +
+      (u ? " · les 2 côtés" : "");
     bv.addEventListener("click", function(){
       st.lignes[st.cour].charge = un ? st.charge : null;
       st.cour++;
